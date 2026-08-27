@@ -113,7 +113,7 @@ The admin portal is now live on the main branch. You can:
 ### Access Points:
 
 - **Frontend**: http://localhost:5173/admin/login
-- **Backend**: https://old-currency.onrender.com/admin/
+- **Backend**: https://old-currency-1.onrender.com/admin/
 - **GitHub**: https://github.com/charanroyal00/old-currency-marketplace
 
 ### Login Credentials:

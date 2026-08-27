@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const API_URL = "https://old-currency.onrender.com/api";
+  const API_URL = "https://old-currency-1.onrender.com/api";
 
   const categoryContainer = document.querySelector(".category-grid");
 

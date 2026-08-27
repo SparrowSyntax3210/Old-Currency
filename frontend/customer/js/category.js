@@ -1,4 +1,4 @@
-const API_BASE = "https://old-currency.onrender.com/api";
+const API_BASE = "https://old-currency-1.onrender.com/api";
 console.log("CATEGORY JS LOADED");
 
 const params = new URLSearchParams(window.location.search);

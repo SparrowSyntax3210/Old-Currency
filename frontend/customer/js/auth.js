@@ -4,7 +4,7 @@
 
 console.log("NUMIS AUTH JS LOADED");
 
-const API_BASE = "https://old-currency.onrender.com/api";
+const API_BASE = "https://old-currency-1.onrender.com/api";
 
 let forgotEmail = "";
 

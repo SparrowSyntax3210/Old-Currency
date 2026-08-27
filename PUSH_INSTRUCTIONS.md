@@ -135,7 +135,7 @@ git push origin pranathi
 - Fully functional admin portal
 
 ### 🔗 Demo
-- Login: https://old-currency.onrender.com/admin/login
+- Login: https://old-currency-1.onrender.com/admin/login
 - Email: pranathi@gmail.com
 - Password: Pranathi@12345
 ```
