@@ -261,12 +261,12 @@ print(f"   📈 Total in database: {Product.objects.count()}")
 
 print(f"\n🎯 NEXT STEPS:")
 print(f"   1. Images: Place product images in 'media/products/' folder")
-print(f"   2. Admin: Login to https://old-currency.onrender.com/admin/login")
+print(f"   2. Admin: Login to https://old-currency-1.onrender.com/admin/login")
 print(f"   3. Edit: Edit each product to upload images")
 print(f"   4. Website: Products will appear on customer website")
 
 print(f"\n📱 ADMIN LOGIN:")
-print(f"   URL: https://old-currency.onrender.com/admin/login")
+print(f"   URL: https://old-currency-1.onrender.com/admin/login")
 print(f"   Email: pranathi@gmail.com")
 print(f"   Password: Pranathi@12345")
 
