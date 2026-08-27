@@ -1,6 +1,7 @@
 # 📤 How to Push Your Code to GitHub
 
 ## ⚠️ Current Issue
+
 The git is configured with username "Priyanshu Patil" but the repository belongs to "charanroyal00". You need to authenticate with the correct account.
 
 ---
@@ -8,6 +9,7 @@ The git is configured with username "Priyanshu Patil" but the repository belongs
 ## 🔧 Solution: Push the Code
 
 ### **Option 1: Push via GitHub Desktop** (Easiest)
+
 1. Open **GitHub Desktop**
 2. Make sure you're logged in with the correct account (charanroyal00 or pranathi's account)
 3. Select the repository: `old-currency-marketplace`
@@ -19,6 +21,7 @@ The git is configured with username "Priyanshu Patil" but the repository belongs
 ### **Option 2: Push via Command Line** (Using Personal Access Token)
 
 #### Step 1: Generate a Personal Access Token
+
 1. Go to: https://github.com/settings/tokens
 2. Click **"Generate new token"** → **"Generate new token (classic)"**
 3. Give it a name: `old-currency-marketplace`
@@ -27,6 +30,7 @@ The git is configured with username "Priyanshu Patil" but the repository belongs
 6. **Copy the token** (you won't see it again!)
 
 #### Step 2: Push using the token
+
 ```bash
 git push https://<YOUR_TOKEN>@github.com/charanroyal00/old-currency-marketplace.git pranathi
 ```
@@ -54,6 +58,7 @@ git push origin pranathi
 ## ✅ What's Ready to Push
 
 ### **All Files Cleaned and Optimized:**
+
 - ✅ Removed test scripts (add_sample_products.py, check_products.py, test_api.py)
 - ✅ Removed old public files (old HTML/CSS)
 - ✅ Removed Postman collection files
@@ -61,6 +66,7 @@ git push origin pranathi
 - ✅ Only production-ready code remains
 
 ### **Commits Ready:**
+
 1. "Fix: Add missing tsconfig.node.json to resolve 500 error"
 2. "Fix: Update frontend to match backend API structure"
 3. "Fix: Allow public access to products and categories API"
@@ -73,11 +79,13 @@ git push origin pranathi
 ## 📝 After Pushing, Create Pull Request
 
 ### Go to GitHub:
+
 1. Visit: https://github.com/charanroyal00/old-currency-marketplace
 2. You should see: **"pranathi had recent pushes"**
 3. Click **"Compare & pull request"**
 4. Title: `Admin Portal - Complete Implementation by Pranathi`
 5. Description:
+
 ```
 ## 🎯 Admin Portal Development - Complete
 
@@ -127,7 +135,7 @@ git push origin pranathi
 - Fully functional admin portal
 
 ### 🔗 Demo
-- Login: http://localhost:5173/admin/login
+- Login: https://old-currency.onrender.com/admin/login
 - Email: pranathi@gmail.com
 - Password: Pranathi@12345
 ```
@@ -140,7 +148,7 @@ git push origin pranathi
 
 **Branch**: `pranathi`  
 **Status**: ✅ All code committed locally  
-**Next Step**: Push to GitHub (choose one option above)  
+**Next Step**: Push to GitHub (choose one option above)
 
 **Files Changed**: 60+ files  
 **Lines Added**: 5,000+  

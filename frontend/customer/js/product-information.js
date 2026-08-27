@@ -1,1006 +1,1083 @@
-/*==========================================================
+  /*==========================================================
 
-                NUMIS PRODUCT PAGE
+                  NUMIS PRODUCT PAGE
 
-==========================================================*/
+  ==========================================================*/
+  gsap.registerPlugin(ScrollTrigger);
 
-gsap.registerPlugin(ScrollTrigger);
+  const API_URL = "http://127.0.0.1:8000/api";
 
-/*==========================================================
+  gsap.registerPlugin(ScrollTrigger);
 
-                URL PARAMETERS
+  const wishlistButton = document.querySelector(".wishlist-btn");
 
-==========================================================*/
+  let product = null;
 
-const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.search);
 
-const productId = params.get("id");
+  console.log(window.location.search);
 
-/*==========================================================
+  const productId = params.get("id");
 
-                DEMO DATABASE
+  console.log(productId);
+  console.log(typeof productId);
 
-        Replace with Backend Later
+  /*==========================================================
 
-==========================================================*/
+                  ELEMENTS
 
-const products = [
-  {
-    id: "888976",
+  ==========================================================*/
 
-    category: "coins",
+  const mainImage = document.querySelector("#mainImage");
 
-    label: "AUTHENTICATED",
+  const productName = document.querySelector("#productName");
 
-    name: "Victoria Silver Rupee",
+  const productPrice = document.querySelector("#productPrice");
 
-    price: "₹18,500",
+  const stickyPrice = document.querySelector("#stickyPrice");
 
-    country: "India",
+  const productStock = document.querySelector("#productStock");
 
-    year: "1886",
+  const productLabel = document.querySelector("#productLabel");
 
-    denomination: "1 Rupee",
+  const shortDescription = document.querySelector("#shortDescription");
 
-    material: "Silver",
+  const thumbnailContainer = document.querySelector("#thumbnailContainer");
 
-    weight: "11.66 g",
+  const breadcrumbName = document.querySelector("#breadcrumbName");
 
-    diameter: "30.5 mm",
+  const breadcrumbCategory = document.querySelector("#breadcrumbCategory");
 
-    mint: "Bombay Mint",
+  /* Quick Specs */
 
-    grade: "UNC",
+  const country = document.querySelector("#country");
 
-    certificate: "Verified",
+  const year = document.querySelector("#year");
 
-    rarity: "Extremely Rare",
+  const grade = document.querySelector("#grade");
 
-    seller: "NUMIS Official",
+  const rarity = document.querySelector("#rarity");
 
-    stock: "Only 4 Available",
+  /* Specifications */
 
-    description:
-      "An exceptional British India Victoria Silver Rupee preserved in remarkable museum-grade condition. A highly sought-after collectible admired for its historical significance and rarity.",
+  const specCountry = document.querySelector("#specCountry");
 
-    historyOne:
-      "Minted during the reign of Queen Victoria, this silver rupee circulated across British India and remains one of the most iconic numismatic pieces in Indian history.",
+  const specYear = document.querySelector("#specYear");
 
-    historyTwo:
-      "Every specimen listed on NUMIS undergoes careful authentication, grading, and historical verification before becoming part of our premium archive.",
+  const specDenomination = document.querySelector("#specDenomination");
 
-    historyThree:
-      "Because of its excellent preservation, limited availability, and strong collector demand, this coin represents both historical heritage and long-term collectible value.",
+  const specMaterial = document.querySelector("#specMaterial");
 
-    images: [
-      "images/products/victoria-1.png",
+  const specWeight = document.querySelector("#specWeight");
 
-      "images/products/victoria-2.png",
+  const specDiameter = document.querySelector("#specDiameter");
 
-      "images/products/victoria-3.png",
+  const specMint = document.querySelector("#specMint");
 
-      "images/products/victoria-4.png",
-    ],
-  },
+  const specGrade = document.querySelector("#specGrade");
 
-  {
-    id: "coin002",
+  const specCertificate = document.querySelector("#specCertificate");
 
-    category: "coins",
+  const specRarity = document.querySelector("#specRarity");
 
-    label: "RARE",
+  const specSeller = document.querySelector("#specSeller");
 
-    name: "Mughal Gold Mohur",
+  const specStock = document.querySelector("#specStock");
 
-    price: "₹65,000",
+  /* History */
 
-    country: "India",
+  const historyOne = document.querySelector("#historyOne");
 
-    year: "1712",
+  const historyTwo = document.querySelector("#historyTwo");
 
-    denomination: "Mohur",
+  const historyThree = document.querySelector("#historyThree");
 
-    material: "Gold",
+  /*==========================================================
 
-    weight: "10.95 g",
+                  POPULATE PAGE
 
-    diameter: "26 mm",
+  ==========================================================*/
 
-    mint: "Delhi",
+  function getProductImage(image) {
 
-    grade: "XF",
-
-    certificate: "Verified",
-
-    rarity: "Very Rare",
-
-    seller: "NUMIS Auctions",
-
-    stock: "Only 1 Available",
-
-    description:
-      "Original Mughal Empire gold coin featuring exquisite Persian inscriptions.",
-
-    historyOne: "Collected from an old royal estate.",
-
-    historyTwo: "Professionally graded by international experts.",
-
-    historyThree: "An important collectible for advanced numismatists.",
-
-    images: [
-      "images/products/mughal-1.png",
-
-      "images/products/mughal-2.png",
-
-      "images/products/mughal-3.png",
-    ],
-  },
-
-  {
-    id: "note001",
-
-    category: "notes",
-
-    label: "COLLECTIBLE",
-
-    name: "1943 One Rupee Note",
-
-    price: "₹12,800",
-
-    country: "India",
-
-    year: "1943",
-
-    denomination: "1 Rupee",
-
-    material: "Paper",
-
-    weight: "-",
-
-    diameter: "-",
-
-    mint: "British India",
-
-    grade: "UNC",
-
-    certificate: "Verified",
-
-    rarity: "Rare",
-
-    seller: "NUMIS",
-
-    stock: "12 Available",
-
-    description:
-      "Historic British India paper currency in exceptional condition.",
-
-    historyOne: "One of the earliest collectible paper notes.",
-
-    historyTwo: "Highly demanded among collectors.",
-
-    historyThree: "Museum quality preservation.",
-
-    images: [
-      "images/products/note1.png",
-
-      "images/products/note2.png",
-
-      "images/products/note3.png",
-    ],
-  },
-];
-
-/*==========================================================
-
-                FIND PRODUCT
-
-==========================================================*/
-
-const product = products.find((item) => item.id === productId);
-
-/*==========================================================
-
-            PRODUCT NOT FOUND
-
-==========================================================*/
-
-if (!product) {
-  document.body.innerHTML = `
-
-<div style="
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-font-family:Inter,sans-serif;
-background:#f8f5ef;
-flex-direction:column;
-">
-
-<h1 style="font-size:60px;">404</h1>
-
-<p>Product not found.</p>
-
-<a href="products.html"
-style="
-margin-top:30px;
-padding:14px 30px;
-background:#b8893d;
-color:white;
-text-decoration:none;
-border-radius:999px;
-">
-
-Back to Products
-
-</a>
-
-</div>
-
-`;
-
-  throw new Error("Invalid Product ID");
-}
-
-/*==========================================================
-
-                ELEMENTS
-
-==========================================================*/
-
-const mainImage = document.querySelector("#mainImage");
-
-const productName = document.querySelector("#productName");
-
-const productPrice = document.querySelector("#productPrice");
-
-const stickyPrice = document.querySelector("#stickyPrice");
-
-const productStock = document.querySelector("#productStock");
-
-const productLabel = document.querySelector("#productLabel");
-
-const shortDescription = document.querySelector("#shortDescription");
-
-const thumbnailContainer = document.querySelector("#thumbnailContainer");
-
-const breadcrumbName = document.querySelector("#breadcrumbName");
-
-const breadcrumbCategory = document.querySelector("#breadcrumbCategory");
-
-/* Quick Specs */
-
-const country = document.querySelector("#country");
-
-const year = document.querySelector("#year");
-
-const grade = document.querySelector("#grade");
-
-const rarity = document.querySelector("#rarity");
-
-/* Specifications */
-
-const specCountry = document.querySelector("#specCountry");
-
-const specYear = document.querySelector("#specYear");
-
-const specDenomination = document.querySelector("#specDenomination");
-
-const specMaterial = document.querySelector("#specMaterial");
-
-const specWeight = document.querySelector("#specWeight");
-
-const specDiameter = document.querySelector("#specDiameter");
-
-const specMint = document.querySelector("#specMint");
-
-const specGrade = document.querySelector("#specGrade");
-
-const specCertificate = document.querySelector("#specCertificate");
-
-const specRarity = document.querySelector("#specRarity");
-
-const specSeller = document.querySelector("#specSeller");
-
-const specStock = document.querySelector("#specStock");
-
-/* History */
-
-const historyOne = document.querySelector("#historyOne");
-
-const historyTwo = document.querySelector("#historyTwo");
-
-const historyThree = document.querySelector("#historyThree");
-
-/*==========================================================
-
-                POPULATE PAGE
-
-==========================================================*/
-
-function populateProduct() {
-  productName.textContent = product.name;
-
-  productPrice.textContent = product.price;
-
-  stickyPrice.textContent = product.price;
-
-  productStock.textContent = product.stock;
-
-  productLabel.textContent = product.label;
-
-  shortDescription.textContent = product.description;
-
-  breadcrumbName.textContent = product.name;
-
-  breadcrumbCategory.textContent = product.category;
-
-  country.textContent = product.country;
-
-  year.textContent = product.year;
-
-  grade.textContent = product.grade;
-
-  rarity.textContent = product.rarity;
-
-  specCountry.textContent = product.country;
-
-  specYear.textContent = product.year;
-
-  specDenomination.textContent = product.denomination;
-
-  specMaterial.textContent = product.material;
-
-  specWeight.textContent = product.weight;
-
-  specDiameter.textContent = product.diameter;
-
-  specMint.textContent = product.mint;
-
-  specGrade.textContent = product.grade;
-
-  specCertificate.textContent = product.certificate;
-
-  specRarity.textContent = product.rarity;
-
-  specSeller.textContent = product.seller;
-
-  specStock.textContent = product.stock;
-
-  historyOne.textContent = product.historyOne;
-
-  historyTwo.textContent = product.historyTwo;
-
-  historyThree.textContent = product.historyThree;
-
-  mainImage.src = product.images[0];
-
-  document.querySelector("#viewerImage").src = product.images[0];
-}
-
-populateProduct();
-
-/*==========================================================
-
-                THUMBNAIL GALLERY
-
-==========================================================*/
-
-function createGallery() {
-  thumbnailContainer.innerHTML = "";
-
-  product.images.forEach((image, index) => {
-    const thumb = document.createElement("div");
-
-    thumb.className = "thumbnail";
-
-    if (index === 0) {
-      thumb.classList.add("active");
+    if (!image) {
+        return "https://placehold.co/600x600";
     }
 
+    // If Django already returns a complete URL
+    if (image.startsWith("http")) {
+        return image;
+    }
+
+    // Django returns something like /media/products/coin.jpg
+    return `http://127.0.0.1:8000${image}`;
+}
+
+  function populateProduct() {
+
+  if (!product) {
+    console.error("PRODUCT DATA IS NULL");
+    return;
+  }
+
+  console.log(
+    "POPULATING PRODUCT:",
+    product
+  );
+
+  const title =
+    product.title ||
+    "Untitled Product";
+
+  const price =
+    Number(product.price || 0);
+
+  const category =
+    product.category_name ||
+    "Collectible";
+
+  const seller =
+    product.seller_name ||
+    "NUMIS Seller";
+
+  const availability =
+    product.is_available
+      ? "Available"
+      : "Sold Out";
+
+  /* =========================
+        MAIN PRODUCT
+  ========================= */
+
+  productName.textContent =
+    title;
+
+  productPrice.textContent =
+    `₹${price.toLocaleString("en-IN")}`;
+
+  stickyPrice.textContent =
+    `₹${price.toLocaleString("en-IN")}`;
+
+  productStock.textContent =
+    availability;
+
+  productLabel.textContent =
+    category;
+
+  shortDescription.textContent =
+    product.description ||
+    "No description available.";
+
+  breadcrumbName.textContent =
+    title;
+
+  breadcrumbCategory.textContent =
+    category;
+
+  /* =========================
+        QUICK SPECS
+  ========================= */
+
+  country.textContent =
+    product.country || "-";
+
+  year.textContent =
+    product.year || "-";
+
+  grade.textContent =
+    product.condition || "-";
+
+  rarity.textContent =
+    product.rarity || "-";
+
+  /* =========================
+        SPECIFICATIONS
+  ========================= */
+
+  specCountry.textContent =
+    product.country || "-";
+
+  specYear.textContent =
+    product.year || "-";
+
+  specDenomination.textContent =
+    product.denomination || "-";
+
+  specMaterial.textContent =
+    product.material || "-";
+
+  specWeight.textContent =
+    product.weight || "-";
+
+  specDiameter.textContent =
+    product.diameter || "-";
+
+  specMint.textContent =
+    product.mint || "-";
+
+  specGrade.textContent =
+    product.condition || "-";
+
+  specCertificate.textContent =
+    product.certificate || "-";
+
+  specRarity.textContent =
+    product.rarity || "-";
+
+  specSeller.textContent =
+    seller;
+
+  specStock.textContent =
+    availability;
+
+  /* =========================
+        HISTORY
+  ========================= */
+
+  historyOne.textContent =
+    product.history_one || "";
+
+  historyTwo.textContent =
+    product.history_two || "";
+
+  historyThree.textContent =
+    product.history_three || "";
+
+  /* =========================
+        IMAGE
+  ========================= */
+
+  const image =
+    getProductImage(product.image);
+
+  mainImage.src =
+    image;
+
+  if (viewerImage) {
+    viewerImage.src =
+      image;
+  }
+}
+  /*==========================================================
+
+                  THUMBNAIL GALLERY
+
+  ==========================================================*/
+
+  function createGallery() {
+
+    thumbnailContainer.innerHTML = "";
+
+    const image =
+      product.image ||
+      "https://placehold.co/600x600";
+
+    const thumb =
+      document.createElement("div");
+
+    thumb.className =
+      "thumbnail active";
+
     thumb.innerHTML = `
+      <img
+        src="${image}"
+        alt="${product.title || "Product"}"
+      >
+    `;
 
-            <img src="${image}" alt="${product.name}">
+    thumbnailContainer.appendChild(
+      thumb
+    );
+  }
 
-        `;
 
-    thumb.addEventListener("click", () => {
-      document.querySelectorAll(".thumbnail").forEach((item) => {
-        item.classList.remove("active");
-      });
+  /*==========================================================
 
-      thumb.classList.add("active");
+              MAIN IMAGE LOADED
 
-      mainImage.classList.add("loading");
+  ==========================================================*/
 
-      gsap.to(mainImage, {
+  mainImage.addEventListener("load", () => {
+    mainImage.classList.remove("loading");
+
+    gsap.fromTo(
+      mainImage,
+
+      {
         opacity: 0,
 
         scale: 0.92,
 
-        duration: 0.25,
+        rotateY: -18,
+      },
 
-        onComplete: () => {
-          mainImage.src = image;
+      {
+        opacity: 1,
 
-          document.querySelector("#viewerImage").src = image;
+        scale: 1,
+
+        rotateY: 0,
+
+        duration: 0.65,
+
+        ease: "power3.out",
+      },
+    );
+  });
+
+  /*==========================================================
+
+                  ADD TO CART
+
+  ==========================================================*/
+
+function addToCart(product) {
+
+  if (!product) {
+
+    console.error(
+      "Cannot add product: product is null"
+    );
+
+    alert("Product information is not loaded yet.");
+
+    return;
+  }
+
+  console.log(
+    "ADDING PRODUCT TO CART:",
+    product
+  );
+
+  let cart =
+    JSON.parse(
+      localStorage.getItem("cart")
+    ) || [];
+
+  const existingProduct =
+    cart.find(
+      (item) =>
+        Number(item.id) ===
+        Number(product.id)
+    );
+
+  if (existingProduct) {
+
+    existingProduct.quantity =
+      Number(existingProduct.quantity || 1) + 1;
+
+  } else {
+
+    const cartProduct = {
+
+      id: product.id,
+
+      name:
+        product.title ||
+        "Untitled Product",
+
+      title:
+        product.title ||
+        "Untitled Product",
+
+      price:
+        Number(product.price || 0),
+
+      image:
+        product.image ||
+        "https://placehold.co/600x600",
+
+      category:
+        product.category_name ||
+        "Collectible",
+
+      year:
+        product.year ||
+        null,
+
+      condition:
+        product.condition ||
+        null,
+
+      grade:
+        product.condition ||
+        null,
+
+      quantity: 1
+    };
+
+    cart.push(cartProduct);
+
+    console.log(
+      "NEW CART PRODUCT:",
+      cartProduct
+    );
+  }
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
+
+  console.log(
+    "FINAL CART:",
+    JSON.parse(
+      localStorage.getItem("cart")
+    )
+  );
+}
+
+  /*==========================================================
+
+                  ADD TO WISHLIST
+
+  ==========================================================*/
+
+  function addToWishlist(product) {
+
+    let wishlist =
+      JSON.parse(
+        localStorage.getItem("wishlist")
+      ) || [];
+
+    const exists =
+      wishlist.some(
+        (item) =>
+          item.id === product.id
+      );
+
+    if (exists) {
+      return;
+    }
+
+    wishlist.push({
+
+      id: product.id,
+
+      name:
+        product.title ||
+        "Untitled Product",
+
+      title:
+        product.title ||
+        "Untitled Product",
+
+      price:
+        Number(product.price || 0),
+
+      image:
+        product.image ||
+        "https://placehold.co/600x600"
+
+    });
+
+    localStorage.setItem(
+      "wishlist",
+      JSON.stringify(wishlist)
+    );
+
+    console.log(
+      "WISHLIST UPDATED:",
+      wishlist
+    );
+  }
+  /*==========================================================
+
+                  BUY BUTTON
+
+  ==========================================================*/
+
+  const buyButton = document.querySelector(".buy-btn");
+
+  if (buyButton) {
+    buyButton.addEventListener("click", () => {
+      addToCart(product);
+
+      gsap.fromTo(
+        buyButton,
+
+        {
+          scale: 1,
+        },
+
+        {
+          scale: 1.08,
+          duration: 0.25,
+          repeat: 1,
+          yoyo: true,
+        },
+      );
+
+      window.location.href = "cart.html";
+    });
+  }
+
+  if (wishlistButton) {
+    wishlistButton.addEventListener("click", () => {
+      addToWishlist(product);
+
+      wishlistButton.innerHTML = "❤ Added";
+
+      wishlistButton.style.borderColor = "#b8893d";
+
+      wishlistButton.style.color = "#b8893d";
+
+      gsap.fromTo(
+        wishlistButton,
+        { scale: 0.8 },
+        {
+          scale: 1,
+          duration: 0.35,
+          ease: "back.out(2)",
+        },
+      );
+    });
+  }
+
+  /*==========================================================
+
+              STICKY BUY BUTTON
+
+  ==========================================================*/
+
+  const stickyBuy = document.querySelector(".floating-purchase button");
+
+  if (stickyBuy) {
+    stickyBuy.addEventListener("click", () => {
+      addToCart(product);
+
+      window.location.href = "cart.html";
+    });
+  }
+
+  /*==========================================================
+
+              VIEWER ROTATE BUTTON
+
+  ==========================================================*/
+
+  const viewerButton = document.querySelector(".viewer-btn");
+
+  const viewerImage = document.querySelector("#viewerImage");
+
+  if (viewerButton && viewerImage) {
+    viewerButton.addEventListener("click", () => {
+      gsap.to(
+        viewerImage,
+
+        {
+          rotationY: "+=360",
+
+          duration: 1.4,
+
+          ease: "power2.inOut",
+        },
+      );
+    });
+  }
+
+/*==========================================================
+                LOAD SINGLE PRODUCT
+==========================================================*/
+
+async function loadProduct() {
+
+  if (!productId) {
+
+    console.error("NO PRODUCT ID");
+
+    document.body.innerHTML = `
+      <div style="
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        height:100vh;
+        flex-direction:column;
+        font-family:Inter,sans-serif;
+        background:#f8f5ef;
+      ">
+
+        <h1>Invalid Product</h1>
+
+        <p>No product ID was provided.</p>
+
+        <a href="products.html">
+          Back to Products
+        </a>
+
+      </div>
+    `;
+
+    return;
+  }
+
+  try {
+
+    console.log(
+      "FETCHING PRODUCT:",
+      `${API_URL}/products/${productId}/`
+    );
+
+    const response = await fetch(
+      `${API_URL}/products/${productId}/`
+    );
+
+    console.log(
+      "PRODUCT RESPONSE STATUS:",
+      response.status
+    );
+
+    if (!response.ok) {
+
+      throw new Error(
+        `Product request failed: ${response.status}`
+      );
+    }
+
+    product = await response.json();
+
+    console.log(
+      "PRODUCT FROM API:",
+      product
+    );
+
+    /* =========================
+          POPULATE
+    ========================= */
+
+    populateProduct();
+
+    /* =========================
+          GALLERY
+    ========================= */
+
+    createGallery();
+
+  } catch (error) {
+
+    console.error(
+      "PRODUCT LOAD ERROR:",
+      error
+    );
+
+    document.body.innerHTML = `
+      <div style="
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        height:100vh;
+        flex-direction:column;
+        font-family:Inter,sans-serif;
+        background:#f8f5ef;
+      ">
+
+        <h1>404</h1>
+
+        <p>Product not found.</p>
+
+        <a
+          href="products.html"
+          style="
+            padding:12px 30px;
+            background:#b8893d;
+            color:#fff;
+            text-decoration:none;
+            border-radius:999px;
+          "
+        >
+          Back to Products
+        </a>
+
+      </div>
+    `;
+  }
+}
+
+loadProduct();
+
+  /*==========================================================
+
+                  PAGE LOAD ANIMATIONS
+
+  ==========================================================*/
+
+  gsap.set(".navbar", {
+    y: -60,
+    opacity: 0,
+  });
+
+  gsap.set(".breadcrumb", {
+    y: 40,
+    opacity: 0,
+  });
+
+  gsap.set(".gallery-wrapper", {
+    x: -80,
+    opacity: 0,
+  });
+
+  gsap.set(".product-information", {
+    x: 80,
+    opacity: 0,
+  });
+
+  gsap.set(".floating-purchase", {
+    x: 80,
+    opacity: 0,
+  });
+
+  const intro = gsap.timeline();
+
+  intro
+    .to(".navbar", {
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      ease: "power3.out",
+    })
+
+    .to(
+      ".breadcrumb",
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+      },
+      "-=.3",
+    )
+
+    .to(
+      ".gallery-wrapper",
+      {
+        x: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power3.out",
+      },
+      "-=.2",
+    )
+
+    .to(
+      ".product-information",
+      {
+        x: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power3.out",
+      },
+      "-=.8",
+    )
+
+    .to(
+      ".floating-purchase",
+      {
+        x: 0,
+        opacity: 1,
+        duration: 0.8,
+      },
+      "-=.7",
+    );
+
+  /*==========================================================
+
+                  FLOATING IMAGE
+
+  ==========================================================*/
+
+  gsap.to(mainImage, {
+    y: -15,
+
+    duration: 3,
+
+    repeat: -1,
+
+    yoyo: true,
+
+    ease: "sine.inOut",
+  });
+
+  /*==========================================================
+
+                  CONTINUOUS ROTATION
+
+  ==========================================================*/
+
+  gsap.to(mainImage, {
+    rotationY: "+=360",
+
+    duration: 20,
+
+    ease: "none",
+
+    repeat: -1,
+
+    transformOrigin: "center center",
+  });
+
+  /*==========================================================
+
+                  GLOW
+
+  ==========================================================*/
+
+  gsap.to(".coin-glow", {
+    scale: 1.08,
+
+    opacity: 0.8,
+
+    duration: 4,
+
+    repeat: -1,
+
+    yoyo: true,
+
+    ease: "sine.inOut",
+  });
+
+  /*==========================================================
+
+                  BACKGROUND ORBS
+
+  ==========================================================*/
+
+  gsap.to(".orb-one", {
+    x: 40,
+
+    y: -50,
+
+    duration: 14,
+
+    repeat: -1,
+
+    yoyo: true,
+
+    ease: "sine.inOut",
+  });
+
+  gsap.to(".orb-two", {
+    x: -50,
+
+    y: 40,
+
+    duration: 16,
+
+    repeat: -1,
+
+    yoyo: true,
+
+    ease: "sine.inOut",
+  });
+
+  gsap.to(".orb-three", {
+    x: 20,
+
+    y: -30,
+
+    duration: 18,
+
+    repeat: -1,
+
+    yoyo: true,
+
+    ease: "sine.inOut",
+  });
+
+  const wishlistLink = document.querySelector(".outline");
+
+  if (wishlistLink) {
+    wishlistLink.addEventListener("click", () => {
+      window.location.href = "wishlist.html";
+    });
+  }
+
+  /*==========================================================
+
+                  IMAGE TILT
+
+  ==========================================================*/
+
+  const imageCard = document.querySelector(".main-image-card");
+
+  if (imageCard) {
+    imageCard.addEventListener("mousemove", (e) => {
+      const rect = imageCard.getBoundingClientRect();
+
+      const x = e.clientX - rect.left;
+
+      const y = e.clientY - rect.top;
+
+      const rotateY = (x / rect.width - 0.5) * 18;
+
+      const rotateX = (y / rect.height - 0.5) * -18;
+
+      gsap.to(imageCard, {
+        rotationY: rotateY,
+
+        rotationX: rotateX,
+
+        transformPerspective: 1000,
+
+        transformOrigin: "center",
+
+        duration: 0.4,
+      });
+    });
+
+    imageCard.addEventListener("mouseleave", () => {
+      gsap.to(imageCard, {
+        rotationX: 0,
+
+        rotationY: 0,
+
+        duration: 0.6,
+
+        ease: "power3.out",
+      });
+    });
+  }
+
+  /*==========================================================
+
+                  SCROLL REVEALS
+
+  ==========================================================*/
+
+  gsap.utils
+    .toArray(".product-section,.certificate-section,.viewer-section,.footer")
+    .forEach((section) => {
+      gsap.from(section, {
+        opacity: 0,
+
+        y: 80,
+
+        duration: 1,
+
+        ease: "power3.out",
+
+        scrollTrigger: {
+          trigger: section,
+
+          start: "top 80%",
         },
       });
     });
 
-    thumbnailContainer.appendChild(thumb);
-  });
-}
+  /*==========================================================
 
-createGallery();
+              SPECIFICATION CARDS
 
-/*==========================================================
+  ==========================================================*/
 
-            MAIN IMAGE LOADED
+  gsap.from(".spec-card", {
+    scrollTrigger: {
+      trigger: ".specifications-grid",
 
-==========================================================*/
-
-mainImage.addEventListener("load", () => {
-  mainImage.classList.remove("loading");
-
-  gsap.fromTo(
-    mainImage,
-
-    {
-      opacity: 0,
-
-      scale: 0.92,
-
-      rotateY: -18,
+      start: "top 80%",
     },
 
-    {
-      opacity: 1,
+    opacity: 0,
 
-      scale: 1,
+    y: 60,
 
-      rotateY: 0,
-
-      duration: 0.65,
-
-      ease: "power3.out",
-    },
-  );
-});
-
-/*==========================================================
-
-                RELATED PRODUCTS
-
-==========================================================*/
-
-const relatedGrid = document.querySelector("#relatedGrid");
-
-function renderRelatedProducts() {
-  if (!relatedGrid) return;
-
-  relatedGrid.innerHTML = "";
-
-  const related = products.filter((item) => item.id !== product.id).slice(0, 4);
-
-  related.forEach((item) => {
-    const card = document.createElement("div");
-
-    card.className = "related-card";
-
-    card.innerHTML = `
-
-            <img src="${item.images[0]}" alt="${item.name}">
-
-            <div class="related-content">
-
-                <span>${item.category.toUpperCase()}</span>
-
-                <h3>${item.name}</h3>
-
-                <strong>${item.price}</strong>
-
-                <button>
-
-                    View Product
-
-                </button>
-
-            </div>
-
-        `;
-
-    card.addEventListener("click", () => {
-      window.location.href = `product-information.html?id=${item.id}`;
-    });
-
-    relatedGrid.appendChild(card);
-  });
-}
-
-renderRelatedProducts();
-
-/*==========================================================
-
-                BUY BUTTON
-
-==========================================================*/
-
-const buyButton = document.querySelector(".buy-btn");
-
-if (buyButton) {
-  buyButton.addEventListener("click", () => {
-    gsap.fromTo(
-      buyButton,
-
-      {
-        scale: 1,
-      },
-
-      {
-        scale: 1.06,
-
-        yoyo: true,
-
-        repeat: 1,
-
-        duration: 0.18,
-      },
-    );
-
-    alert(`Proceeding to checkout for\n\n${product.name}`);
-  });
-}
-
-/*==========================================================
-
-                WISHLIST
-
-==========================================================*/
-
-const wishlistButton = document.querySelector(".wishlist-btn");
-
-if (wishlistButton) {
-  wishlistButton.addEventListener("click", () => {
-    wishlistButton.innerHTML = "❤ Added";
-
-    wishlistButton.style.borderColor = "#b8893d";
-
-    wishlistButton.style.color = "#b8893d";
-
-    gsap.fromTo(
-      wishlistButton,
-
-      {
-        scale: 0.8,
-      },
-
-      {
-        scale: 1,
-
-        duration: 0.35,
-
-        ease: "back.out(2)",
-      },
-    );
-  });
-}
-
-/*==========================================================
-
-            STICKY BUY BUTTON
-
-==========================================================*/
-
-const stickyBuy = document.querySelector(".floating-purchase button");
-
-if (stickyBuy) {
-  stickyBuy.addEventListener("click", () => {
-    buyButton.click();
-  });
-}
-
-/*==========================================================
-
-            VIEWER ROTATE BUTTON
-
-==========================================================*/
-
-const viewerButton = document.querySelector(".viewer-btn");
-
-const viewerImage = document.querySelector("#viewerImage");
-
-if (viewerButton && viewerImage) {
-  viewerButton.addEventListener("click", () => {
-    gsap.to(
-      viewerImage,
-
-      {
-        rotationY: "+=360",
-
-        duration: 1.4,
-
-        ease: "power2.inOut",
-      },
-    );
-  });
-}
-
-/*==========================================================
-
-                PAGE LOAD ANIMATIONS
-
-==========================================================*/
-
-gsap.set(".navbar", {
-  y: -60,
-  opacity: 0,
-});
-
-gsap.set(".breadcrumb", {
-  y: 40,
-  opacity: 0,
-});
-
-gsap.set(".gallery-wrapper", {
-  x: -80,
-  opacity: 0,
-});
-
-gsap.set(".product-information", {
-  x: 80,
-  opacity: 0,
-});
-
-gsap.set(".floating-purchase", {
-  x: 80,
-  opacity: 0,
-});
-
-const intro = gsap.timeline();
-
-intro
-  .to(".navbar", {
-    y: 0,
-    opacity: 1,
     duration: 0.8,
+
+    stagger: 0.08,
+
     ease: "power3.out",
-  })
+  });
 
-  .to(
-    ".breadcrumb",
-    {
-      y: 0,
-      opacity: 1,
-      duration: 0.6,
+  /*==========================================================
+
+              RELATED CARDS
+
+  ==========================================================*/
+
+  gsap.from(".related-card", {
+    scrollTrigger: {
+      trigger: ".related-grid",
+
+      start: "top 85%",
     },
-    "-=.3",
-  )
 
-  .to(
-    ".gallery-wrapper",
-    {
-      x: 0,
-      opacity: 1,
-      duration: 1,
-      ease: "power3.out",
-    },
-    "-=.2",
-  )
+    opacity: 0,
 
-  .to(
-    ".product-information",
-    {
-      x: 0,
-      opacity: 1,
-      duration: 1,
-      ease: "power3.out",
-    },
-    "-=.8",
-  )
+    y: 80,
 
-  .to(
-    ".floating-purchase",
-    {
-      x: 0,
-      opacity: 1,
-      duration: 0.8,
-    },
-    "-=.7",
-  );
+    scale: 0.9,
 
-/*==========================================================
+    stagger: 0.12,
 
-                FLOATING IMAGE
+    duration: 0.8,
 
-==========================================================*/
+    ease: "power3.out",
+  });
 
-gsap.to(mainImage, {
-  y: -15,
+  /*==========================================================
 
-  duration: 3,
+              CERTIFICATE BADGE
 
-  repeat: -1,
+  ==========================================================*/
 
-  yoyo: true,
+  gsap.to(".certificate-badge", {
+    rotation: 360,
 
-  ease: "sine.inOut",
-});
+    duration: 40,
 
-/*==========================================================
+    repeat: -1,
 
-                CONTINUOUS ROTATION
+    ease: "none",
+  });
 
-==========================================================*/
+  /*==========================================================
 
-gsap.to(mainImage, {
-  rotationY: "+=360",
+                  PARALLAX
 
-  duration: 20,
+  ==========================================================*/
 
-  ease: "none",
+  window.addEventListener("mousemove", (e) => {
+    const x = e.clientX / window.innerWidth - 0.5;
 
-  repeat: -1,
+    const y = e.clientY / window.innerHeight - 0.5;
 
-  transformOrigin: "center center",
-});
+    gsap.to(".background-orb", {
+      x: x * 40,
 
-/*==========================================================
+      y: y * 40,
 
-                GLOW
+      duration: 3,
 
-==========================================================*/
-
-gsap.to(".coin-glow", {
-  scale: 1.08,
-
-  opacity: 0.8,
-
-  duration: 4,
-
-  repeat: -1,
-
-  yoyo: true,
-
-  ease: "sine.inOut",
-});
-
-/*==========================================================
-
-                BACKGROUND ORBS
-
-==========================================================*/
-
-gsap.to(".orb-one", {
-  x: 40,
-
-  y: -50,
-
-  duration: 14,
-
-  repeat: -1,
-
-  yoyo: true,
-
-  ease: "sine.inOut",
-});
-
-gsap.to(".orb-two", {
-  x: -50,
-
-  y: 40,
-
-  duration: 16,
-
-  repeat: -1,
-
-  yoyo: true,
-
-  ease: "sine.inOut",
-});
-
-gsap.to(".orb-three", {
-  x: 20,
-
-  y: -30,
-
-  duration: 18,
-
-  repeat: -1,
-
-  yoyo: true,
-
-  ease: "sine.inOut",
-});
-
-/*==========================================================
-
-                IMAGE TILT
-
-==========================================================*/
-
-const imageCard = document.querySelector(".main-image-card");
-
-if (imageCard) {
-  imageCard.addEventListener("mousemove", (e) => {
-    const rect = imageCard.getBoundingClientRect();
-
-    const x = e.clientX - rect.left;
-
-    const y = e.clientY - rect.top;
-
-    const rotateY = (x / rect.width - 0.5) * 18;
-
-    const rotateX = (y / rect.height - 0.5) * -18;
-
-    gsap.to(imageCard, {
-      rotationY: rotateY,
-
-      rotationX: rotateX,
-
-      transformPerspective: 1000,
-
-      transformOrigin: "center",
-
-      duration: 0.4,
+      overwrite: "auto",
     });
   });
 
-  imageCard.addEventListener("mouseleave", () => {
-    gsap.to(imageCard, {
-      rotationX: 0,
+  /*==========================================================
 
-      rotationY: 0,
+                  BUTTON HOVER
 
-      duration: 0.6,
+  ==========================================================*/
 
-      ease: "power3.out",
+  document.querySelectorAll("button").forEach((btn) => {
+    btn.addEventListener("mouseenter", () => {
+      gsap.to(btn, {
+        scale: 1.04,
+
+        duration: 0.25,
+      });
     });
-  });
-}
 
-/*==========================================================
+    btn.addEventListener("mouseleave", () => {
+      gsap.to(btn, {
+        scale: 1,
 
-                SCROLL REVEALS
-
-==========================================================*/
-
-gsap.utils
-  .toArray(".product-section,.certificate-section,.viewer-section,.footer")
-  .forEach((section) => {
-    gsap.from(section, {
-      opacity: 0,
-
-      y: 80,
-
-      duration: 1,
-
-      ease: "power3.out",
-
-      scrollTrigger: {
-        trigger: section,
-
-        start: "top 80%",
-      },
+        duration: 0.25,
+      });
     });
   });
 
-/*==========================================================
+  /*==========================================================
 
-            SPECIFICATION CARDS
+              PREMIUM PAGE READY
 
-==========================================================*/
+  ==========================================================*/
 
-gsap.from(".spec-card", {
-  scrollTrigger: {
-    trigger: ".specifications-grid",
-
-    start: "top 80%",
-  },
-
-  opacity: 0,
-
-  y: 60,
-
-  duration: 0.8,
-
-  stagger: 0.08,
-
-  ease: "power3.out",
-});
-
-/*==========================================================
-
-            RELATED CARDS
-
-==========================================================*/
-
-gsap.from(".related-card", {
-  scrollTrigger: {
-    trigger: ".related-grid",
-
-    start: "top 85%",
-  },
-
-  opacity: 0,
-
-  y: 80,
-
-  scale: 0.9,
-
-  stagger: 0.12,
-
-  duration: 0.8,
-
-  ease: "power3.out",
-});
-
-/*==========================================================
-
-            CERTIFICATE BADGE
-
-==========================================================*/
-
-gsap.to(".certificate-badge", {
-  rotation: 360,
-
-  duration: 40,
-
-  repeat: -1,
-
-  ease: "none",
-});
-
-/*==========================================================
-
-                PARALLAX
-
-==========================================================*/
-
-window.addEventListener("mousemove", (e) => {
-  const x = e.clientX / window.innerWidth - 0.5;
-
-  const y = e.clientY / window.innerHeight - 0.5;
-
-  gsap.to(".background-orb", {
-    x: x * 40,
-
-    y: y * 40,
-
-    duration: 3,
-
-    overwrite: "auto",
-  });
-});
-
-/*==========================================================
-
-                BUTTON HOVER
-
-==========================================================*/
-
-document.querySelectorAll("button").forEach((btn) => {
-  btn.addEventListener("mouseenter", () => {
-    gsap.to(btn, {
-      scale: 1.04,
-
-      duration: 0.25,
-    });
-  });
-
-  btn.addEventListener("mouseleave", () => {
-    gsap.to(btn, {
-      scale: 1,
-
-      duration: 0.25,
-    });
-  });
-});
-
-/*==========================================================
-
-            PREMIUM PAGE READY
-
-==========================================================*/
-
-console.log("NUMIS Product Page Loaded Successfully");
+  console.log("NUMIS Product Page Loaded Successfully");

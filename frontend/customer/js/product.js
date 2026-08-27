@@ -1,3 +1,6 @@
+const API_URL = "http://127.0.0.1:8000/api";
+let visibleProducts = [];
+
 /*========================================================
 
                 NUMIS PRODUCTS
@@ -30,326 +33,225 @@ const loadButton = document.querySelector(".load-btn");
 
 const params = new URLSearchParams(window.location.search);
 
-const currentCategory = params.get("category") || "coins";
+// category id passed from category.html
+const categoryId = params.get("id");
 
-/*========================================================
-
-            CATEGORY CONFIG
-
-========================================================*/
-
-const categoryConfig = {
-  coins: {
-    title: "Rare Coins",
-
-    description:
-      "Discover authenticated historic coins curated from prestigious numismatic collections.",
-
-    count: 188,
-  },
-
-  notes: {
-    title: "Currency Notes",
-
-    description:
-      "Explore preserved banknotes featuring rare serials, error prints and commemorative issues.",
-
-    count: 241,
-  },
-
-  international: {
-    title: "International Currency",
-
-    description: "Museum-grade collectibles from countries around the world.",
-
-    count: 94,
-  },
-
-  collections: {
-    title: "Premium Collections",
-
-    description: "Handpicked collections assembled for passionate collectors.",
-
-    count: 52,
-  },
-
-  auction: {
-    title: "Live Auctions",
-
-    description:
-      "Bid on exclusive authenticated collectibles before they disappear.",
-
-    count: 36,
-  },
-
-  blogs: {
-    title: "Numismatic Journal",
-
-    description: "Articles, history and educational content from experts.",
-
-    count: 76,
-  },
-};
-
-/*========================================================
-
-            UPDATE HERO
-
-========================================================*/
-
-function updateHero() {
-  const config = categoryConfig[currentCategory] || categoryConfig.coins;
-
-  heroTitle.textContent = config.title;
-
-  heroDescription.textContent = config.description;
-
-  breadcrumbCategory.textContent = config.title;
-
-  productCount.textContent = config.count;
+if (!categoryId) {
+  alert("Category not found");
+  window.location.href = "categories.html";
 }
-
-updateHero();
-
-/*========================================================
-
-            DEMO PRODUCTS
-
-========================================================*/
-
-const demoProducts = [
-  {
-    id: 888976,
-
-    name: "Victoria Silver Rupee",
-
-    category: "coins",
-
-    price: 18500,
-
-    image: "images/demo-coin.png",
-
-    label: "BRITISH INDIA",
-
-    description: "Museum authenticated silver rupee from 1886.",
-  },
-
-  {
-    id: 2,
-
-    name: "Akbar Gold Mohur",
-
-    category: "coins",
-
-    price: 74000,
-
-    image: "images/demo-coin2.png",
-
-    label: "MUGHAL",
-
-    description: "Imperial gold issue with exceptional preservation.",
-  },
-
-  {
-    id: 3,
-
-    name: "Bombay Mint Coin",
-
-    category: "coins",
-
-    price: 11600,
-
-    image: "images/demo-coin3.png",
-
-    label: "REPUBLIC",
-
-    description: "Historic silver collectible.",
-  },
-
-  {
-    id: 4,
-
-    name: "₹10 Error Note",
-
-    category: "notes",
-
-    price: 32000,
-
-    image: "images/demo-note.png",
-
-    label: "ERROR NOTE",
-
-    description: "Exceptional printing error.",
-  },
-
-  {
-    id: 5,
-
-    name: "₹100 Star Note",
-
-    category: "notes",
-
-    price: 8200,
-
-    image: "images/demo-note2.png",
-
-    label: "STAR NOTE",
-
-    description: "Highly collectible preserved banknote.",
-  },
-
-  {
-    id: 6,
-
-    name: "US Dollar 1934",
-
-    category: "international",
-
-    price: 12800,
-
-    image: "images/usd.png",
-
-    label: "USA",
-
-    description: "Historic international collectible.",
-  },
-
-  {
-    id: 7,
-
-    name: "Premium Heritage Set",
-
-    category: "collections",
-
-    price: 49500,
-
-    image: "images/collection.png",
-
-    label: "LIMITED",
-
-    description: "Luxury curated collection.",
-  },
-
-  {
-    id: 8,
-
-    name: "Live Auction Lot #102",
-
-    category: "auction",
-
-    price: 25000,
-
-    image: "images/auction.png",
-
-    label: "LIVE",
-
-    description: "Ending in a few hours.",
-  },
-];
-
-/*========================================================
-
-        FILTER PRODUCTS
-
-========================================================*/
-
-let visibleProducts = demoProducts.filter((product) => {
-  if (currentCategory === "coins") return product.category === "coins";
-
-  if (currentCategory === "notes") return product.category === "notes";
-
-  if (currentCategory === "international")
-    return product.category === "international";
-
-  if (currentCategory === "collections")
-    return product.category === "collections";
-
-  if (currentCategory === "auction") return product.category === "auction";
-
-  return true;
-});
-
-/*========================================================
-
-            CREATE CARD
-
-========================================================*/
-
-function createCard(product, index) {
-  const sizeClasses = ["large", "wide", "tall", "", ""];
-
-  const size = sizeClasses[index % sizeClasses.length];
-
-  return `
-
-<article class="product-card ${size}" data-id="${product.id}">
-
-<div class="spotlight"></div>
-
-<div class="product-image">
-
-<img src="${product.image}" alt="${product.name}">
-
-</div>
-
-<div class="product-content">
-
-<span class="product-category">
-
-${product.label}
-
-</span>
-
-<h2>
-
-${product.name}
-
-</h2>
-
-<p>
-
-${product.description}
-
-</p>
-
-<div class="product-bottom">
-
-<strong>
-
-₹${product.price.toLocaleString()}
-
-</strong>
-
-<a href="product-information.html?id=${product.id}">
-
-View Details →
-
-</a>
-
-</div>
-
-</div>
-
-</article>
-
-`;
-}
-
-/*========================================================
-
-            RENDER PRODUCTS
-
-========================================================*/
 
 function renderProducts(products) {
+
   productsGrid.innerHTML = "";
 
+  if (products.length === 0) {
+
+    productsGrid.innerHTML = `
+      <h2>No Products Found</h2>
+    `;
+
+    return;
+  }
+
+  heroTitle.textContent =
+    products[0].category_name ||
+    "Products";
+
+  heroDescription.textContent =
+    products[0].category_description ||
+    "Browse rare historical collectibles.";
+
+  breadcrumbCategory.textContent =
+    products[0].category_name ||
+    "Products";
+
+  productCount.textContent =
+    products.length;
+
   products.forEach((product, index) => {
-    productsGrid.innerHTML += createCard(product, index);
+
+    const sizeClasses = [
+      "large",
+      "wide",
+      "tall",
+      "",
+      ""
+    ];
+
+    const size =
+      sizeClasses[
+        index % sizeClasses.length
+      ];
+
+    const title =
+      product.title ||
+      "Untitled Product";
+
+    const image =
+      product.image ||
+      "https://placehold.co/600x600";
+
+    productsGrid.innerHTML += `
+
+      <article
+        class="product-card ${size}"
+        data-id="${product.id}"
+      >
+
+        <div class="spotlight"></div>
+
+        <div class="product-image">
+
+          <img
+            src="${image}"
+            alt="${title}"
+          >
+
+        </div>
+
+        <div class="product-content">
+
+          <span class="product-category">
+            ${product.category_name || "Collectible"}
+          </span>
+
+          <h2>
+            ${title}
+          </h2>
+
+          <p>
+            ${
+              product.description ||
+              "No description available."
+            }
+          </p>
+
+          <div class="product-bottom">
+
+            <strong>
+              ₹${Number(product.price || 0).toLocaleString("en-IN")}
+            </strong>
+
+            <a
+              href="product-information.html?id=${product.id}"
+            >
+              View Details →
+            </a>
+
+          </div>
+
+        </div>
+
+      </article>
+    `;
   });
+
+  applyCardAnimations();
+}
+function performSearch() {
+
+  const value =
+    searchInput.value
+      .toLowerCase()
+      .trim();
+
+  filteredProducts =
+    visibleProducts.filter((product) => {
+
+      const title =
+        (product.title || "").toLowerCase();
+
+      const description =
+        (product.description || "").toLowerCase();
+
+      const category =
+        (product.category_name || "").toLowerCase();
+
+      return (
+        title.includes(value) ||
+        description.includes(value) ||
+        category.includes(value)
+      );
+
+    });
+
+  renderProducts(filteredProducts);
+
+  updateCounter();
 }
 
-renderProducts(visibleProducts);
+
+async function loadProducts() {
+
+  try {
+
+    const response = await fetch(
+      `${API_URL}/products/?category=${categoryId}`
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Unable to fetch products"
+      );
+    }
+
+    const products =
+      await response.json();
+
+    console.log(
+      "PRODUCTS FROM API:",
+      products
+    );
+
+    visibleProducts = products;
+
+    filteredProducts = [...products];
+
+    if (products.length === 0) {
+
+      productsGrid.innerHTML = `
+        <h2>No products available.</h2>
+      `;
+
+      productCount.textContent = "0";
+
+      return;
+    }
+
+    heroTitle.textContent =
+      products[0].category_name ||
+      "Products";
+
+    heroDescription.textContent =
+      products[0].category_description ||
+      "Browse available products.";
+
+    breadcrumbCategory.textContent =
+      products[0].category_name ||
+      "Products";
+
+    productCount.textContent =
+      products.length;
+
+    renderProducts(products);
+
+    updateCounter();
+
+  } catch (error) {
+
+    console.error(
+      "PRODUCT LOAD ERROR:",
+      error
+    );
+
+    productsGrid.innerHTML = `
+      <h2>Unable to load products.</h2>
+    `;
+  }
+}
+
+loadProducts();
 
 /*========================================================
 
@@ -359,21 +261,6 @@ renderProducts(visibleProducts);
 
 let filteredProducts = [...visibleProducts];
 
-function performSearch() {
-  const value = searchInput.value.toLowerCase().trim();
-
-  filteredProducts = visibleProducts.filter((product) => {
-    return (
-      product.name.toLowerCase().includes(value) ||
-      product.label.toLowerCase().includes(value) ||
-      product.description.toLowerCase().includes(value)
-    );
-  });
-
-  renderProducts(filteredProducts);
-
-  applyCardAnimations();
-}
 
 if (searchInput) {
   searchInput.addEventListener("input", performSearch);
@@ -386,39 +273,56 @@ if (searchInput) {
 ========================================================*/
 
 function sortProducts(type) {
+
   switch (type) {
+
     case "Newest":
-      filteredProducts.sort((a, b) => b.id - a.id);
+
+      filteredProducts.sort(
+        (a, b) => b.id - a.id
+      );
 
       break;
 
     case "Oldest":
-      filteredProducts.sort((a, b) => a.id - b.id);
+
+      filteredProducts.sort(
+        (a, b) => a.id - b.id
+      );
 
       break;
 
     case "Price Low → High":
-      filteredProducts.sort((a, b) => a.price - b.price);
+
+      filteredProducts.sort(
+        (a, b) =>
+          Number(a.price) - Number(b.price)
+      );
 
       break;
 
     case "Price High → Low":
-      filteredProducts.sort((a, b) => b.price - a.price);
+
+      filteredProducts.sort(
+        (a, b) =>
+          Number(b.price) - Number(a.price)
+      );
 
       break;
 
     case "Most Rare":
-      filteredProducts.sort((a, b) => b.price - a.price);
 
-      break;
+      filteredProducts.sort(
+        (a, b) =>
+          Number(b.price) - Number(a.price)
+      );
 
-    default:
       break;
   }
 
   renderProducts(filteredProducts);
 
-  applyCardAnimations();
+  updateCounter();
 }
 
 if (sortSelect) {
@@ -426,84 +330,6 @@ if (sortSelect) {
     sortProducts(e.target.value);
   });
 }
-
-/*========================================================
-
-                LOAD MORE
-
-========================================================*/
-
-let productsShown = 6;
-
-function renderLimitedProducts() {
-  const display = filteredProducts.slice(0, productsShown);
-
-  renderProducts(display);
-
-  applyCardAnimations();
-}
-
-productsShown = 6;
-
-renderLimitedProducts();
-
-if (loadButton) {
-  loadButton.addEventListener("click", () => {
-    productsShown += 6;
-
-    renderLimitedProducts();
-
-    if (productsShown >= filteredProducts.length) {
-      loadButton.innerHTML = "All Products Loaded";
-
-      loadButton.disabled = true;
-    }
-  });
-}
-
-/*========================================================
-
-            FILTER CHECKBOXES
-
-========================================================*/
-
-const filterCheckboxes = document.querySelectorAll(
-  ".filter-group input[type='checkbox']",
-);
-
-filterCheckboxes.forEach((box) => {
-  box.addEventListener("change", () => {
-    let active = [];
-
-    filterCheckboxes.forEach((cb) => {
-      if (cb.checked) {
-        active.push(cb.parentElement.innerText.toLowerCase());
-      }
-    });
-
-    if (active.length === 0) {
-      filteredProducts = [...visibleProducts];
-
-      renderLimitedProducts();
-
-      return;
-    }
-
-    filteredProducts = visibleProducts.filter((product) => {
-      const text = (
-        product.name +
-        product.label +
-        product.description
-      ).toLowerCase();
-
-      return active.some((item) => text.includes(item));
-    });
-
-    productsShown = 6;
-
-    renderLimitedProducts();
-  });
-});
 
 /*========================================================
 
@@ -997,4 +823,3 @@ if (logo) {
     });
   });
 }
-
