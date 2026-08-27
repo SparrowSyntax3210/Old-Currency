@@ -1,4 +1,3 @@
-{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -11,7 +10,7 @@
     <!-- GSAP -->
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-    <link rel="stylesheet" href="{% static 'css/auth.css' %}" />
+    <link rel="stylesheet" href="./css/auth.css" />
   </head>
 
   <body>
@@ -118,23 +117,23 @@
             <div class="input-group">
               <label for="registerUsername"> USERNAME </label>
 
-<input
-    type="text"
-    id="registerUsername"
-    placeholder="Choose a username"
-    required
-/>
+              <input
+                type="text"
+                id="registerUsername"
+                placeholder="Choose a username"
+                required
+              />
             </div>
 
             <div class="input-group">
               <label for="registerEmail"> EMAIL ADDRESS </label>
 
-<input
-    type="email"
-    id="registerEmail"
-    placeholder="Enter your email"
-    required
-/>
+              <input
+                type="email"
+                id="registerEmail"
+                placeholder="Enter your email"
+                required
+              />
             </div>
 
             <div class="input-row">
@@ -201,12 +200,12 @@
             <div class="input-group">
               <label for="loginUsername"> USERNAME </label>
 
-<input
-    type="text"
-    id="loginUsername"
-    placeholder="Enter your username"
-    required
-/>
+              <input
+                type="text"
+                id="loginUsername"
+                placeholder="Enter your username"
+                required
+              />
             </div>
 
             <div class="input-group">
@@ -297,59 +296,49 @@
           </div>
 
           <form id="otpVerifyForm">
+            <div class="input-row">
+              <input maxlength="1" class="otp-box" id="otp1" />
+              <input maxlength="1" class="otp-box" id="otp2" />
+              <input maxlength="1" class="otp-box" id="otp3" />
+              <input maxlength="1" class="otp-box" id="otp4" />
+              <input maxlength="1" class="otp-box" id="otp5" />
+              <input maxlength="1" class="otp-box" id="otp6" />
+            </div>
 
-    <div class="input-row">
-        <input maxlength="1" class="otp-box" id="otp1">
-        <input maxlength="1" class="otp-box" id="otp2">
-        <input maxlength="1" class="otp-box" id="otp3">
-        <input maxlength="1" class="otp-box" id="otp4">
-        <input maxlength="1" class="otp-box" id="otp5">
-        <input maxlength="1" class="otp-box" id="otp6">
-    </div>
+            <button type="submit" class="submit-button">
+              <span>VERIFY OTP</span>
+              <span>↗</span>
+            </button>
+          </form>
+          <!-- RESET PASSWORD -->
 
-    <button type="submit" class="submit-button">
-        <span>VERIFY OTP</span>
-        <span>↗</span>
-    </button>
+          <div class="auth-form-container" id="resetForm">
+            <div class="form-heading">
+              <span>WELCOME BACK TO THE ARCHIVE</span>
 
-</form>
-<!-- RESET PASSWORD -->
+              <h2>Create a <em>new password.</em></h2>
 
-<div class="auth-form-container" id="resetForm">
+              <p>Please enter your new password.</p>
+            </div>
 
-    <div class="form-heading">
+            <form id="resetPasswordForm">
+              <div class="input-group">
+                <label>NEW PASSWORD</label>
 
-        <span>WELCOME BACK TO THE ARCHIVE</span>
+                <input
+                  type="password"
+                  id="newPassword"
+                  placeholder="Enter new password"
+                  required
+                />
+              </div>
 
-        <h2>Create a <em>new password.</em></h2>
-
-        <p>Please enter your new password.</p>
-
-    </div>
-
-    <form id="resetPasswordForm">
-
-        <div class="input-group">
-
-            <label>NEW PASSWORD</label>
-
-            <input
-                type="password"
-                id="newPassword"
-                placeholder="Enter new password"
-                required
-            />
-
-        </div>
-
-        <button type="submit" class="submit-button">
-            <span>RESET PASSWORD</span>
-            <span>↗</span>
-        </button>
-
-    </form>
-
-</div>
+              <button type="submit" class="submit-button">
+                <span>RESET PASSWORD</span>
+                <span>↗</span>
+              </button>
+            </form>
+          </div>
 
           <p class="form-footer">
             <button class="inline-switch" id="backToLogin2">
@@ -359,6 +348,6 @@
         </div>
       </section>
     </main>
-    <script src="{% static 'js/auth.js' %}"></script>
+    <script src="./js/auth.js"></script>
   </body>
 </html>
