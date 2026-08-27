@@ -1,589 +1,467 @@
-  /*==========================================================
+/*==========================================================
 
                   NUMIS PRODUCT PAGE
 
   ==========================================================*/
-  gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
-  const API_URL = "http://127.0.0.1:8000/api";
+const API_URL = "https://old-currency.onrender.com/api";
 
-  gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
-  const wishlistButton = document.querySelector(".wishlist-btn");
+const wishlistButton = document.querySelector(".wishlist-btn");
 
-  let product = null;
+let product = null;
 
-  const params = new URLSearchParams(window.location.search);
+const params = new URLSearchParams(window.location.search);
 
-  console.log(window.location.search);
+console.log(window.location.search);
 
-  const productId = params.get("id");
+const productId = params.get("id");
 
-  console.log(productId);
-  console.log(typeof productId);
+console.log(productId);
+console.log(typeof productId);
 
-  /*==========================================================
+/*==========================================================
 
                   ELEMENTS
 
   ==========================================================*/
 
-  const mainImage = document.querySelector("#mainImage");
+const mainImage = document.querySelector("#mainImage");
 
-  const productName = document.querySelector("#productName");
+const productName = document.querySelector("#productName");
 
-  const productPrice = document.querySelector("#productPrice");
+const productPrice = document.querySelector("#productPrice");
 
-  const stickyPrice = document.querySelector("#stickyPrice");
+const stickyPrice = document.querySelector("#stickyPrice");
 
-  const productStock = document.querySelector("#productStock");
+const productStock = document.querySelector("#productStock");
 
-  const productLabel = document.querySelector("#productLabel");
+const productLabel = document.querySelector("#productLabel");
 
-  const shortDescription = document.querySelector("#shortDescription");
+const shortDescription = document.querySelector("#shortDescription");
 
-  const thumbnailContainer = document.querySelector("#thumbnailContainer");
+const thumbnailContainer = document.querySelector("#thumbnailContainer");
 
-  const breadcrumbName = document.querySelector("#breadcrumbName");
+const breadcrumbName = document.querySelector("#breadcrumbName");
 
-  const breadcrumbCategory = document.querySelector("#breadcrumbCategory");
+const breadcrumbCategory = document.querySelector("#breadcrumbCategory");
 
-  /* Quick Specs */
+/* Quick Specs */
 
-  const country = document.querySelector("#country");
+const country = document.querySelector("#country");
 
-  const year = document.querySelector("#year");
+const year = document.querySelector("#year");
 
-  const grade = document.querySelector("#grade");
+const grade = document.querySelector("#grade");
 
-  const rarity = document.querySelector("#rarity");
+const rarity = document.querySelector("#rarity");
 
-  /* Specifications */
+/* Specifications */
 
-  const specCountry = document.querySelector("#specCountry");
+const specCountry = document.querySelector("#specCountry");
 
-  const specYear = document.querySelector("#specYear");
+const specYear = document.querySelector("#specYear");
 
-  const specDenomination = document.querySelector("#specDenomination");
+const specDenomination = document.querySelector("#specDenomination");
 
-  const specMaterial = document.querySelector("#specMaterial");
+const specMaterial = document.querySelector("#specMaterial");
 
-  const specWeight = document.querySelector("#specWeight");
+const specWeight = document.querySelector("#specWeight");
 
-  const specDiameter = document.querySelector("#specDiameter");
+const specDiameter = document.querySelector("#specDiameter");
 
-  const specMint = document.querySelector("#specMint");
+const specMint = document.querySelector("#specMint");
 
-  const specGrade = document.querySelector("#specGrade");
+const specGrade = document.querySelector("#specGrade");
 
-  const specCertificate = document.querySelector("#specCertificate");
+const specCertificate = document.querySelector("#specCertificate");
 
-  const specRarity = document.querySelector("#specRarity");
+const specRarity = document.querySelector("#specRarity");
 
-  const specSeller = document.querySelector("#specSeller");
+const specSeller = document.querySelector("#specSeller");
 
-  const specStock = document.querySelector("#specStock");
+const specStock = document.querySelector("#specStock");
 
-  /* History */
+/* History */
 
-  const historyOne = document.querySelector("#historyOne");
+const historyOne = document.querySelector("#historyOne");
 
-  const historyTwo = document.querySelector("#historyTwo");
+const historyTwo = document.querySelector("#historyTwo");
 
-  const historyThree = document.querySelector("#historyThree");
+const historyThree = document.querySelector("#historyThree");
 
-  /*==========================================================
+/*==========================================================
 
                   POPULATE PAGE
 
   ==========================================================*/
 
-  function getProductImage(image) {
+function getProductImage(image) {
+  if (!image) {
+    return "https://placehold.co/600x600";
+  }
 
-    if (!image) {
-        return "https://placehold.co/600x600";
-    }
+  // If Django already returns a complete URL
+  if (image.startsWith("http")) {
+    return image;
+  }
 
-    // If Django already returns a complete URL
-    if (image.startsWith("http")) {
-        return image;
-    }
-
-    // Django returns something like /media/products/coin.jpg
-    return `http://127.0.0.1:8000${image}`;
+  // Django returns something like /media/products/coin.jpg
+  return `http://127.0.0.1:8000${image}`;
 }
 
-  function populateProduct() {
-
+function populateProduct() {
   if (!product) {
     console.error("PRODUCT DATA IS NULL");
     return;
   }
 
-  console.log(
-    "POPULATING PRODUCT:",
-    product
-  );
+  console.log("POPULATING PRODUCT:", product);
 
-  const title =
-    product.title ||
-    "Untitled Product";
+  const title = product.title || "Untitled Product";
 
-  const price =
-    Number(product.price || 0);
+  const price = Number(product.price || 0);
 
-  const category =
-    product.category_name ||
-    "Collectible";
+  const category = product.category_name || "Collectible";
 
-  const seller =
-    product.seller_name ||
-    "NUMIS Seller";
+  const seller = product.seller_name || "NUMIS Seller";
 
-  const availability =
-    product.is_available
-      ? "Available"
-      : "Sold Out";
+  const availability = product.is_available ? "Available" : "Sold Out";
 
   /* =========================
         MAIN PRODUCT
   ========================= */
 
-  productName.textContent =
-    title;
+  productName.textContent = title;
 
-  productPrice.textContent =
-    `₹${price.toLocaleString("en-IN")}`;
+  productPrice.textContent = `₹${price.toLocaleString("en-IN")}`;
 
-  stickyPrice.textContent =
-    `₹${price.toLocaleString("en-IN")}`;
+  stickyPrice.textContent = `₹${price.toLocaleString("en-IN")}`;
 
-  productStock.textContent =
-    availability;
+  productStock.textContent = availability;
 
-  productLabel.textContent =
-    category;
+  productLabel.textContent = category;
 
   shortDescription.textContent =
-    product.description ||
-    "No description available.";
+    product.description || "No description available.";
 
-  breadcrumbName.textContent =
-    title;
+  breadcrumbName.textContent = title;
 
-  breadcrumbCategory.textContent =
-    category;
+  breadcrumbCategory.textContent = category;
 
   /* =========================
         QUICK SPECS
   ========================= */
 
-  country.textContent =
-    product.country || "-";
+  country.textContent = product.country || "-";
 
-  year.textContent =
-    product.year || "-";
+  year.textContent = product.year || "-";
 
-  grade.textContent =
-    product.condition || "-";
+  grade.textContent = product.condition || "-";
 
-  rarity.textContent =
-    product.rarity || "-";
+  rarity.textContent = product.rarity || "-";
 
   /* =========================
         SPECIFICATIONS
   ========================= */
 
-  specCountry.textContent =
-    product.country || "-";
+  specCountry.textContent = product.country || "-";
 
-  specYear.textContent =
-    product.year || "-";
+  specYear.textContent = product.year || "-";
 
-  specDenomination.textContent =
-    product.denomination || "-";
+  specDenomination.textContent = product.denomination || "-";
 
-  specMaterial.textContent =
-    product.material || "-";
+  specMaterial.textContent = product.material || "-";
 
-  specWeight.textContent =
-    product.weight || "-";
+  specWeight.textContent = product.weight || "-";
 
-  specDiameter.textContent =
-    product.diameter || "-";
+  specDiameter.textContent = product.diameter || "-";
 
-  specMint.textContent =
-    product.mint || "-";
+  specMint.textContent = product.mint || "-";
 
-  specGrade.textContent =
-    product.condition || "-";
+  specGrade.textContent = product.condition || "-";
 
-  specCertificate.textContent =
-    product.certificate || "-";
+  specCertificate.textContent = product.certificate || "-";
 
-  specRarity.textContent =
-    product.rarity || "-";
+  specRarity.textContent = product.rarity || "-";
 
-  specSeller.textContent =
-    seller;
+  specSeller.textContent = seller;
 
-  specStock.textContent =
-    availability;
+  specStock.textContent = availability;
 
   /* =========================
         HISTORY
   ========================= */
 
-  historyOne.textContent =
-    product.history_one || "";
+  historyOne.textContent = product.history_one || "";
 
-  historyTwo.textContent =
-    product.history_two || "";
+  historyTwo.textContent = product.history_two || "";
 
-  historyThree.textContent =
-    product.history_three || "";
+  historyThree.textContent = product.history_three || "";
 
   /* =========================
         IMAGE
   ========================= */
 
-  const image =
-    getProductImage(product.image);
+  const image = getProductImage(product.image);
 
-  mainImage.src =
-    image;
+  mainImage.src = image;
 
   if (viewerImage) {
-    viewerImage.src =
-      image;
+    viewerImage.src = image;
   }
 }
-  /*==========================================================
+/*==========================================================
 
                   THUMBNAIL GALLERY
 
   ==========================================================*/
 
-  function createGallery() {
+function createGallery() {
+  thumbnailContainer.innerHTML = "";
 
-    thumbnailContainer.innerHTML = "";
+  const image = product.image || "https://placehold.co/600x600";
 
-    const image =
-      product.image ||
-      "https://placehold.co/600x600";
+  const thumb = document.createElement("div");
 
-    const thumb =
-      document.createElement("div");
+  thumb.className = "thumbnail active";
 
-    thumb.className =
-      "thumbnail active";
-
-    thumb.innerHTML = `
+  thumb.innerHTML = `
       <img
         src="${image}"
         alt="${product.title || "Product"}"
       >
     `;
 
-    thumbnailContainer.appendChild(
-      thumb
-    );
-  }
+  thumbnailContainer.appendChild(thumb);
+}
 
-
-  /*==========================================================
+/*==========================================================
 
               MAIN IMAGE LOADED
 
   ==========================================================*/
 
-  mainImage.addEventListener("load", () => {
-    mainImage.classList.remove("loading");
+mainImage.addEventListener("load", () => {
+  mainImage.classList.remove("loading");
 
-    gsap.fromTo(
-      mainImage,
+  gsap.fromTo(
+    mainImage,
 
-      {
-        opacity: 0,
+    {
+      opacity: 0,
 
-        scale: 0.92,
+      scale: 0.92,
 
-        rotateY: -18,
-      },
+      rotateY: -18,
+    },
 
-      {
-        opacity: 1,
+    {
+      opacity: 1,
 
-        scale: 1,
+      scale: 1,
 
-        rotateY: 0,
+      rotateY: 0,
 
-        duration: 0.65,
+      duration: 0.65,
 
-        ease: "power3.out",
-      },
-    );
-  });
+      ease: "power3.out",
+    },
+  );
+});
 
-  /*==========================================================
+/*==========================================================
 
                   ADD TO CART
 
   ==========================================================*/
 
 function addToCart(product) {
-
   if (!product) {
-
-    console.error(
-      "Cannot add product: product is null"
-    );
+    console.error("Cannot add product: product is null");
 
     alert("Product information is not loaded yet.");
 
     return;
   }
 
-  console.log(
-    "ADDING PRODUCT TO CART:",
-    product
+  console.log("ADDING PRODUCT TO CART:", product);
+
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  const existingProduct = cart.find(
+    (item) => Number(item.id) === Number(product.id),
   );
 
-  let cart =
-    JSON.parse(
-      localStorage.getItem("cart")
-    ) || [];
-
-  const existingProduct =
-    cart.find(
-      (item) =>
-        Number(item.id) ===
-        Number(product.id)
-    );
-
   if (existingProduct) {
-
-    existingProduct.quantity =
-      Number(existingProduct.quantity || 1) + 1;
-
+    existingProduct.quantity = Number(existingProduct.quantity || 1) + 1;
   } else {
-
     const cartProduct = {
-
       id: product.id,
 
-      name:
-        product.title ||
-        "Untitled Product",
+      name: product.title || "Untitled Product",
 
-      title:
-        product.title ||
-        "Untitled Product",
+      title: product.title || "Untitled Product",
 
-      price:
-        Number(product.price || 0),
+      price: Number(product.price || 0),
 
-      image:
-        product.image ||
-        "https://placehold.co/600x600",
+      image: product.image || "https://placehold.co/600x600",
 
-      category:
-        product.category_name ||
-        "Collectible",
+      category: product.category_name || "Collectible",
 
-      year:
-        product.year ||
-        null,
+      year: product.year || null,
 
-      condition:
-        product.condition ||
-        null,
+      condition: product.condition || null,
 
-      grade:
-        product.condition ||
-        null,
+      grade: product.condition || null,
 
-      quantity: 1
+      quantity: 1,
     };
 
     cart.push(cartProduct);
 
-    console.log(
-      "NEW CART PRODUCT:",
-      cartProduct
-    );
+    console.log("NEW CART PRODUCT:", cartProduct);
   }
 
-  localStorage.setItem(
-    "cart",
-    JSON.stringify(cart)
-  );
+  localStorage.setItem("cart", JSON.stringify(cart));
 
-  console.log(
-    "FINAL CART:",
-    JSON.parse(
-      localStorage.getItem("cart")
-    )
-  );
+  console.log("FINAL CART:", JSON.parse(localStorage.getItem("cart")));
 }
 
-  /*==========================================================
+/*==========================================================
 
                   ADD TO WISHLIST
 
   ==========================================================*/
 
-  function addToWishlist(product) {
+function addToWishlist(product) {
+  let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
-    let wishlist =
-      JSON.parse(
-        localStorage.getItem("wishlist")
-      ) || [];
+  const exists = wishlist.some((item) => item.id === product.id);
 
-    const exists =
-      wishlist.some(
-        (item) =>
-          item.id === product.id
-      );
-
-    if (exists) {
-      return;
-    }
-
-    wishlist.push({
-
-      id: product.id,
-
-      name:
-        product.title ||
-        "Untitled Product",
-
-      title:
-        product.title ||
-        "Untitled Product",
-
-      price:
-        Number(product.price || 0),
-
-      image:
-        product.image ||
-        "https://placehold.co/600x600"
-
-    });
-
-    localStorage.setItem(
-      "wishlist",
-      JSON.stringify(wishlist)
-    );
-
-    console.log(
-      "WISHLIST UPDATED:",
-      wishlist
-    );
+  if (exists) {
+    return;
   }
-  /*==========================================================
+
+  wishlist.push({
+    id: product.id,
+
+    name: product.title || "Untitled Product",
+
+    title: product.title || "Untitled Product",
+
+    price: Number(product.price || 0),
+
+    image: product.image || "https://placehold.co/600x600",
+  });
+
+  localStorage.setItem("wishlist", JSON.stringify(wishlist));
+
+  console.log("WISHLIST UPDATED:", wishlist);
+}
+/*==========================================================
 
                   BUY BUTTON
 
   ==========================================================*/
 
-  const buyButton = document.querySelector(".buy-btn");
+const buyButton = document.querySelector(".buy-btn");
 
-  if (buyButton) {
-    buyButton.addEventListener("click", () => {
-      addToCart(product);
+if (buyButton) {
+  buyButton.addEventListener("click", () => {
+    addToCart(product);
 
-      gsap.fromTo(
-        buyButton,
+    gsap.fromTo(
+      buyButton,
 
-        {
-          scale: 1,
-        },
+      {
+        scale: 1,
+      },
 
-        {
-          scale: 1.08,
-          duration: 0.25,
-          repeat: 1,
-          yoyo: true,
-        },
-      );
+      {
+        scale: 1.08,
+        duration: 0.25,
+        repeat: 1,
+        yoyo: true,
+      },
+    );
 
-      window.location.href = "cart.html";
-    });
-  }
+    window.location.href = "cart.html";
+  });
+}
 
-  if (wishlistButton) {
-    wishlistButton.addEventListener("click", () => {
-      addToWishlist(product);
+if (wishlistButton) {
+  wishlistButton.addEventListener("click", () => {
+    addToWishlist(product);
 
-      wishlistButton.innerHTML = "❤ Added";
+    wishlistButton.innerHTML = "❤ Added";
 
-      wishlistButton.style.borderColor = "#b8893d";
+    wishlistButton.style.borderColor = "#b8893d";
 
-      wishlistButton.style.color = "#b8893d";
+    wishlistButton.style.color = "#b8893d";
 
-      gsap.fromTo(
-        wishlistButton,
-        { scale: 0.8 },
-        {
-          scale: 1,
-          duration: 0.35,
-          ease: "back.out(2)",
-        },
-      );
-    });
-  }
+    gsap.fromTo(
+      wishlistButton,
+      { scale: 0.8 },
+      {
+        scale: 1,
+        duration: 0.35,
+        ease: "back.out(2)",
+      },
+    );
+  });
+}
 
-  /*==========================================================
+/*==========================================================
 
               STICKY BUY BUTTON
 
   ==========================================================*/
 
-  const stickyBuy = document.querySelector(".floating-purchase button");
+const stickyBuy = document.querySelector(".floating-purchase button");
 
-  if (stickyBuy) {
-    stickyBuy.addEventListener("click", () => {
-      addToCart(product);
+if (stickyBuy) {
+  stickyBuy.addEventListener("click", () => {
+    addToCart(product);
 
-      window.location.href = "cart.html";
-    });
-  }
+    window.location.href = "cart.html";
+  });
+}
 
-  /*==========================================================
+/*==========================================================
 
               VIEWER ROTATE BUTTON
 
   ==========================================================*/
 
-  const viewerButton = document.querySelector(".viewer-btn");
+const viewerButton = document.querySelector(".viewer-btn");
 
-  const viewerImage = document.querySelector("#viewerImage");
+const viewerImage = document.querySelector("#viewerImage");
 
-  if (viewerButton && viewerImage) {
-    viewerButton.addEventListener("click", () => {
-      gsap.to(
-        viewerImage,
+if (viewerButton && viewerImage) {
+  viewerButton.addEventListener("click", () => {
+    gsap.to(
+      viewerImage,
 
-        {
-          rotationY: "+=360",
+      {
+        rotationY: "+=360",
 
-          duration: 1.4,
+        duration: 1.4,
 
-          ease: "power2.inOut",
-        },
-      );
-    });
-  }
+        ease: "power2.inOut",
+      },
+    );
+  });
+}
 
 /*==========================================================
                 LOAD SINGLE PRODUCT
 ==========================================================*/
 
 async function loadProduct() {
-
   if (!productId) {
-
     console.error("NO PRODUCT ID");
 
     document.body.innerHTML = `
@@ -612,34 +490,19 @@ async function loadProduct() {
   }
 
   try {
+    console.log("FETCHING PRODUCT:", `${API_URL}/products/${productId}/`);
 
-    console.log(
-      "FETCHING PRODUCT:",
-      `${API_URL}/products/${productId}/`
-    );
+    const response = await fetch(`${API_URL}/products/${productId}/`);
 
-    const response = await fetch(
-      `${API_URL}/products/${productId}/`
-    );
-
-    console.log(
-      "PRODUCT RESPONSE STATUS:",
-      response.status
-    );
+    console.log("PRODUCT RESPONSE STATUS:", response.status);
 
     if (!response.ok) {
-
-      throw new Error(
-        `Product request failed: ${response.status}`
-      );
+      throw new Error(`Product request failed: ${response.status}`);
     }
 
     product = await response.json();
 
-    console.log(
-      "PRODUCT FROM API:",
-      product
-    );
+    console.log("PRODUCT FROM API:", product);
 
     /* =========================
           POPULATE
@@ -652,13 +515,8 @@ async function loadProduct() {
     ========================= */
 
     createGallery();
-
   } catch (error) {
-
-    console.error(
-      "PRODUCT LOAD ERROR:",
-      error
-    );
+    console.error("PRODUCT LOAD ERROR:", error);
 
     document.body.innerHTML = `
       <div style="
@@ -695,389 +553,389 @@ async function loadProduct() {
 
 loadProduct();
 
-  /*==========================================================
+/*==========================================================
 
                   PAGE LOAD ANIMATIONS
 
   ==========================================================*/
 
-  gsap.set(".navbar", {
-    y: -60,
-    opacity: 0,
-  });
+gsap.set(".navbar", {
+  y: -60,
+  opacity: 0,
+});
 
-  gsap.set(".breadcrumb", {
-    y: 40,
-    opacity: 0,
-  });
+gsap.set(".breadcrumb", {
+  y: 40,
+  opacity: 0,
+});
 
-  gsap.set(".gallery-wrapper", {
-    x: -80,
-    opacity: 0,
-  });
+gsap.set(".gallery-wrapper", {
+  x: -80,
+  opacity: 0,
+});
 
-  gsap.set(".product-information", {
-    x: 80,
-    opacity: 0,
-  });
+gsap.set(".product-information", {
+  x: 80,
+  opacity: 0,
+});
 
-  gsap.set(".floating-purchase", {
-    x: 80,
-    opacity: 0,
-  });
+gsap.set(".floating-purchase", {
+  x: 80,
+  opacity: 0,
+});
 
-  const intro = gsap.timeline();
+const intro = gsap.timeline();
 
-  intro
-    .to(".navbar", {
+intro
+  .to(".navbar", {
+    y: 0,
+    opacity: 1,
+    duration: 0.8,
+    ease: "power3.out",
+  })
+
+  .to(
+    ".breadcrumb",
+    {
       y: 0,
       opacity: 1,
-      duration: 0.8,
+      duration: 0.6,
+    },
+    "-=.3",
+  )
+
+  .to(
+    ".gallery-wrapper",
+    {
+      x: 0,
+      opacity: 1,
+      duration: 1,
       ease: "power3.out",
-    })
+    },
+    "-=.2",
+  )
 
-    .to(
-      ".breadcrumb",
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-      },
-      "-=.3",
-    )
+  .to(
+    ".product-information",
+    {
+      x: 0,
+      opacity: 1,
+      duration: 1,
+      ease: "power3.out",
+    },
+    "-=.8",
+  )
 
-    .to(
-      ".gallery-wrapper",
-      {
-        x: 0,
-        opacity: 1,
-        duration: 1,
-        ease: "power3.out",
-      },
-      "-=.2",
-    )
+  .to(
+    ".floating-purchase",
+    {
+      x: 0,
+      opacity: 1,
+      duration: 0.8,
+    },
+    "-=.7",
+  );
 
-    .to(
-      ".product-information",
-      {
-        x: 0,
-        opacity: 1,
-        duration: 1,
-        ease: "power3.out",
-      },
-      "-=.8",
-    )
-
-    .to(
-      ".floating-purchase",
-      {
-        x: 0,
-        opacity: 1,
-        duration: 0.8,
-      },
-      "-=.7",
-    );
-
-  /*==========================================================
+/*==========================================================
 
                   FLOATING IMAGE
 
   ==========================================================*/
 
-  gsap.to(mainImage, {
-    y: -15,
+gsap.to(mainImage, {
+  y: -15,
 
-    duration: 3,
+  duration: 3,
 
-    repeat: -1,
+  repeat: -1,
 
-    yoyo: true,
+  yoyo: true,
 
-    ease: "sine.inOut",
-  });
+  ease: "sine.inOut",
+});
 
-  /*==========================================================
+/*==========================================================
 
                   CONTINUOUS ROTATION
 
   ==========================================================*/
 
-  gsap.to(mainImage, {
-    rotationY: "+=360",
+gsap.to(mainImage, {
+  rotationY: "+=360",
 
-    duration: 20,
+  duration: 20,
 
-    ease: "none",
+  ease: "none",
 
-    repeat: -1,
+  repeat: -1,
 
-    transformOrigin: "center center",
-  });
+  transformOrigin: "center center",
+});
 
-  /*==========================================================
+/*==========================================================
 
                   GLOW
 
   ==========================================================*/
 
-  gsap.to(".coin-glow", {
-    scale: 1.08,
+gsap.to(".coin-glow", {
+  scale: 1.08,
 
-    opacity: 0.8,
+  opacity: 0.8,
 
-    duration: 4,
+  duration: 4,
 
-    repeat: -1,
+  repeat: -1,
 
-    yoyo: true,
+  yoyo: true,
 
-    ease: "sine.inOut",
-  });
+  ease: "sine.inOut",
+});
 
-  /*==========================================================
+/*==========================================================
 
                   BACKGROUND ORBS
 
   ==========================================================*/
 
-  gsap.to(".orb-one", {
-    x: 40,
+gsap.to(".orb-one", {
+  x: 40,
 
-    y: -50,
+  y: -50,
 
-    duration: 14,
+  duration: 14,
 
-    repeat: -1,
+  repeat: -1,
 
-    yoyo: true,
+  yoyo: true,
 
-    ease: "sine.inOut",
+  ease: "sine.inOut",
+});
+
+gsap.to(".orb-two", {
+  x: -50,
+
+  y: 40,
+
+  duration: 16,
+
+  repeat: -1,
+
+  yoyo: true,
+
+  ease: "sine.inOut",
+});
+
+gsap.to(".orb-three", {
+  x: 20,
+
+  y: -30,
+
+  duration: 18,
+
+  repeat: -1,
+
+  yoyo: true,
+
+  ease: "sine.inOut",
+});
+
+const wishlistLink = document.querySelector(".outline");
+
+if (wishlistLink) {
+  wishlistLink.addEventListener("click", () => {
+    window.location.href = "wishlist.html";
   });
+}
 
-  gsap.to(".orb-two", {
-    x: -50,
-
-    y: 40,
-
-    duration: 16,
-
-    repeat: -1,
-
-    yoyo: true,
-
-    ease: "sine.inOut",
-  });
-
-  gsap.to(".orb-three", {
-    x: 20,
-
-    y: -30,
-
-    duration: 18,
-
-    repeat: -1,
-
-    yoyo: true,
-
-    ease: "sine.inOut",
-  });
-
-  const wishlistLink = document.querySelector(".outline");
-
-  if (wishlistLink) {
-    wishlistLink.addEventListener("click", () => {
-      window.location.href = "wishlist.html";
-    });
-  }
-
-  /*==========================================================
+/*==========================================================
 
                   IMAGE TILT
 
   ==========================================================*/
 
-  const imageCard = document.querySelector(".main-image-card");
+const imageCard = document.querySelector(".main-image-card");
 
-  if (imageCard) {
-    imageCard.addEventListener("mousemove", (e) => {
-      const rect = imageCard.getBoundingClientRect();
+if (imageCard) {
+  imageCard.addEventListener("mousemove", (e) => {
+    const rect = imageCard.getBoundingClientRect();
 
-      const x = e.clientX - rect.left;
+    const x = e.clientX - rect.left;
 
-      const y = e.clientY - rect.top;
+    const y = e.clientY - rect.top;
 
-      const rotateY = (x / rect.width - 0.5) * 18;
+    const rotateY = (x / rect.width - 0.5) * 18;
 
-      const rotateX = (y / rect.height - 0.5) * -18;
+    const rotateX = (y / rect.height - 0.5) * -18;
 
-      gsap.to(imageCard, {
-        rotationY: rotateY,
+    gsap.to(imageCard, {
+      rotationY: rotateY,
 
-        rotationX: rotateX,
+      rotationX: rotateX,
 
-        transformPerspective: 1000,
+      transformPerspective: 1000,
 
-        transformOrigin: "center",
+      transformOrigin: "center",
 
-        duration: 0.4,
-      });
+      duration: 0.4,
     });
+  });
 
-    imageCard.addEventListener("mouseleave", () => {
-      gsap.to(imageCard, {
-        rotationX: 0,
+  imageCard.addEventListener("mouseleave", () => {
+    gsap.to(imageCard, {
+      rotationX: 0,
 
-        rotationY: 0,
+      rotationY: 0,
 
-        duration: 0.6,
+      duration: 0.6,
 
-        ease: "power3.out",
-      });
+      ease: "power3.out",
     });
-  }
+  });
+}
 
-  /*==========================================================
+/*==========================================================
 
                   SCROLL REVEALS
 
   ==========================================================*/
 
-  gsap.utils
-    .toArray(".product-section,.certificate-section,.viewer-section,.footer")
-    .forEach((section) => {
-      gsap.from(section, {
-        opacity: 0,
+gsap.utils
+  .toArray(".product-section,.certificate-section,.viewer-section,.footer")
+  .forEach((section) => {
+    gsap.from(section, {
+      opacity: 0,
 
-        y: 80,
+      y: 80,
 
-        duration: 1,
+      duration: 1,
 
-        ease: "power3.out",
+      ease: "power3.out",
 
-        scrollTrigger: {
-          trigger: section,
+      scrollTrigger: {
+        trigger: section,
 
-          start: "top 80%",
-        },
-      });
+        start: "top 80%",
+      },
     });
+  });
 
-  /*==========================================================
+/*==========================================================
 
               SPECIFICATION CARDS
 
   ==========================================================*/
 
-  gsap.from(".spec-card", {
-    scrollTrigger: {
-      trigger: ".specifications-grid",
+gsap.from(".spec-card", {
+  scrollTrigger: {
+    trigger: ".specifications-grid",
 
-      start: "top 80%",
-    },
+    start: "top 80%",
+  },
 
-    opacity: 0,
+  opacity: 0,
 
-    y: 60,
+  y: 60,
 
-    duration: 0.8,
+  duration: 0.8,
 
-    stagger: 0.08,
+  stagger: 0.08,
 
-    ease: "power3.out",
-  });
+  ease: "power3.out",
+});
 
-  /*==========================================================
+/*==========================================================
 
               RELATED CARDS
 
   ==========================================================*/
 
-  gsap.from(".related-card", {
-    scrollTrigger: {
-      trigger: ".related-grid",
+gsap.from(".related-card", {
+  scrollTrigger: {
+    trigger: ".related-grid",
 
-      start: "top 85%",
-    },
+    start: "top 85%",
+  },
 
-    opacity: 0,
+  opacity: 0,
 
-    y: 80,
+  y: 80,
 
-    scale: 0.9,
+  scale: 0.9,
 
-    stagger: 0.12,
+  stagger: 0.12,
 
-    duration: 0.8,
+  duration: 0.8,
 
-    ease: "power3.out",
-  });
+  ease: "power3.out",
+});
 
-  /*==========================================================
+/*==========================================================
 
               CERTIFICATE BADGE
 
   ==========================================================*/
 
-  gsap.to(".certificate-badge", {
-    rotation: 360,
+gsap.to(".certificate-badge", {
+  rotation: 360,
 
-    duration: 40,
+  duration: 40,
 
-    repeat: -1,
+  repeat: -1,
 
-    ease: "none",
-  });
+  ease: "none",
+});
 
-  /*==========================================================
+/*==========================================================
 
                   PARALLAX
 
   ==========================================================*/
 
-  window.addEventListener("mousemove", (e) => {
-    const x = e.clientX / window.innerWidth - 0.5;
+window.addEventListener("mousemove", (e) => {
+  const x = e.clientX / window.innerWidth - 0.5;
 
-    const y = e.clientY / window.innerHeight - 0.5;
+  const y = e.clientY / window.innerHeight - 0.5;
 
-    gsap.to(".background-orb", {
-      x: x * 40,
+  gsap.to(".background-orb", {
+    x: x * 40,
 
-      y: y * 40,
+    y: y * 40,
 
-      duration: 3,
+    duration: 3,
 
-      overwrite: "auto",
-    });
+    overwrite: "auto",
   });
+});
 
-  /*==========================================================
+/*==========================================================
 
                   BUTTON HOVER
 
   ==========================================================*/
 
-  document.querySelectorAll("button").forEach((btn) => {
-    btn.addEventListener("mouseenter", () => {
-      gsap.to(btn, {
-        scale: 1.04,
+document.querySelectorAll("button").forEach((btn) => {
+  btn.addEventListener("mouseenter", () => {
+    gsap.to(btn, {
+      scale: 1.04,
 
-        duration: 0.25,
-      });
-    });
-
-    btn.addEventListener("mouseleave", () => {
-      gsap.to(btn, {
-        scale: 1,
-
-        duration: 0.25,
-      });
+      duration: 0.25,
     });
   });
 
-  /*==========================================================
+  btn.addEventListener("mouseleave", () => {
+    gsap.to(btn, {
+      scale: 1,
+
+      duration: 0.25,
+    });
+  });
+});
+
+/*==========================================================
 
               PREMIUM PAGE READY
 
   ==========================================================*/
 
-  console.log("NUMIS Product Page Loaded Successfully");
+console.log("NUMIS Product Page Loaded Successfully");

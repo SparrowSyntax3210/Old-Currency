@@ -23,7 +23,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-The API runs at `http://127.0.0.1:8000/`.
+The API runs at `https://old-currency.onrender.com/`.
 
 ### Admin dashboard
 
@@ -57,6 +57,6 @@ cd backend
 python add_real_products.py
 ```
 
-Keep secrets in environment variables for production; do not commit `.env` files. The admin frontend expects the Django API at `http://127.0.0.1:8000/api/`.
+Keep secrets in environment variables for production; do not commit `.env` files. The admin frontend expects the Django API at `https://old-currency.onrender.com/api/`.
 
 See [PUSH_INSTRUCTIONS.md](PUSH_INSTRUCTIONS.md) for GitHub publishing notes.

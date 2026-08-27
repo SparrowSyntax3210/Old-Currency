@@ -4,17 +4,30 @@
       "source": "/",
       "destination": "/customer/index.html"
     },
+
     {
-      "source": "/css/:path*",
-      "destination": "/customer/css/:path*"
+      "source": "/auth.html",
+      "destination": "/customer/auth.html"
     },
     {
-      "source": "/js/:path*",
-      "destination": "/customer/js/:path*"
+      "source": "/cart.html",
+      "destination": "/customer/cart.html"
     },
     {
-      "source": "/script.js",
-      "destination": "/customer/script.js"
+      "source": "/cart-checkout.html",
+      "destination": "/customer/cart-checkout.html"
+    },
+    {
+      "source": "/category.html",
+      "destination": "/customer/category.html"
+    },
+    {
+      "source": "/orders.html",
+      "destination": "/customer/orders.html"
+    },
+    {
+      "source": "/payment.html",
+      "destination": "/customer/payment.html"
     },
     {
       "source": "/product.html",
@@ -25,9 +38,32 @@
       "destination": "/customer/product-information.html"
     },
     {
-      "source": "/registration-form.html",
-      "destination": "/customer/registration-form.html"
+      "source": "/tracking.html",
+      "destination": "/customer/tracking.html"
     },
+    {
+      "source": "/wishlist.html",
+      "destination": "/customer/wishlist.html"
+    },
+
+    {
+      "source": "/css/:path*",
+      "destination": "/customer/css/:path*"
+    },
+    {
+      "source": "/js/:path*",
+      "destination": "/customer/js/:path*"
+    },
+    {
+      "source": "/assests/:path*",
+      "destination": "/customer/assests/:path*"
+    },
+
+    {
+      "source": "/vite.svg",
+      "destination": "/customer/vite.svg"
+    },
+
     {
       "source": "/admin",
       "destination": "/admin/index.html"

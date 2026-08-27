@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000/api";
+const API_URL = "https://old-currency.onrender.com/api";
 let visibleProducts = [];
 
 /*========================================================
@@ -42,11 +42,9 @@ if (!categoryId) {
 }
 
 function renderProducts(products) {
-
   productsGrid.innerHTML = "";
 
   if (products.length === 0) {
-
     productsGrid.innerHTML = `
       <h2>No Products Found</h2>
     `;
@@ -54,43 +52,23 @@ function renderProducts(products) {
     return;
   }
 
-  heroTitle.textContent =
-    products[0].category_name ||
-    "Products";
+  heroTitle.textContent = products[0].category_name || "Products";
 
   heroDescription.textContent =
-    products[0].category_description ||
-    "Browse rare historical collectibles.";
+    products[0].category_description || "Browse rare historical collectibles.";
 
-  breadcrumbCategory.textContent =
-    products[0].category_name ||
-    "Products";
+  breadcrumbCategory.textContent = products[0].category_name || "Products";
 
-  productCount.textContent =
-    products.length;
+  productCount.textContent = products.length;
 
   products.forEach((product, index) => {
+    const sizeClasses = ["large", "wide", "tall", "", ""];
 
-    const sizeClasses = [
-      "large",
-      "wide",
-      "tall",
-      "",
-      ""
-    ];
+    const size = sizeClasses[index % sizeClasses.length];
 
-    const size =
-      sizeClasses[
-        index % sizeClasses.length
-      ];
+    const title = product.title || "Untitled Product";
 
-    const title =
-      product.title ||
-      "Untitled Product";
-
-    const image =
-      product.image ||
-      "https://placehold.co/600x600";
+    const image = product.image || "https://placehold.co/600x600";
 
     productsGrid.innerHTML += `
 
@@ -121,10 +99,7 @@ function renderProducts(products) {
           </h2>
 
           <p>
-            ${
-              product.description ||
-              "No description available."
-            }
+            ${product.description || "No description available."}
           </p>
 
           <div class="product-bottom">
@@ -150,66 +125,44 @@ function renderProducts(products) {
   applyCardAnimations();
 }
 function performSearch() {
+  const value = searchInput.value.toLowerCase().trim();
 
-  const value =
-    searchInput.value
-      .toLowerCase()
-      .trim();
+  filteredProducts = visibleProducts.filter((product) => {
+    const title = (product.title || "").toLowerCase();
 
-  filteredProducts =
-    visibleProducts.filter((product) => {
+    const description = (product.description || "").toLowerCase();
 
-      const title =
-        (product.title || "").toLowerCase();
+    const category = (product.category_name || "").toLowerCase();
 
-      const description =
-        (product.description || "").toLowerCase();
-
-      const category =
-        (product.category_name || "").toLowerCase();
-
-      return (
-        title.includes(value) ||
-        description.includes(value) ||
-        category.includes(value)
-      );
-
-    });
+    return (
+      title.includes(value) ||
+      description.includes(value) ||
+      category.includes(value)
+    );
+  });
 
   renderProducts(filteredProducts);
 
   updateCounter();
 }
 
-
 async function loadProducts() {
-
   try {
-
-    const response = await fetch(
-      `${API_URL}/products/?category=${categoryId}`
-    );
+    const response = await fetch(`${API_URL}/products/?category=${categoryId}`);
 
     if (!response.ok) {
-      throw new Error(
-        "Unable to fetch products"
-      );
+      throw new Error("Unable to fetch products");
     }
 
-    const products =
-      await response.json();
+    const products = await response.json();
 
-    console.log(
-      "PRODUCTS FROM API:",
-      products
-    );
+    console.log("PRODUCTS FROM API:", products);
 
     visibleProducts = products;
 
     filteredProducts = [...products];
 
     if (products.length === 0) {
-
       productsGrid.innerHTML = `
         <h2>No products available.</h2>
       `;
@@ -219,31 +172,20 @@ async function loadProducts() {
       return;
     }
 
-    heroTitle.textContent =
-      products[0].category_name ||
-      "Products";
+    heroTitle.textContent = products[0].category_name || "Products";
 
     heroDescription.textContent =
-      products[0].category_description ||
-      "Browse available products.";
+      products[0].category_description || "Browse available products.";
 
-    breadcrumbCategory.textContent =
-      products[0].category_name ||
-      "Products";
+    breadcrumbCategory.textContent = products[0].category_name || "Products";
 
-    productCount.textContent =
-      products.length;
+    productCount.textContent = products.length;
 
     renderProducts(products);
 
     updateCounter();
-
   } catch (error) {
-
-    console.error(
-      "PRODUCT LOAD ERROR:",
-      error
-    );
+    console.error("PRODUCT LOAD ERROR:", error);
 
     productsGrid.innerHTML = `
       <h2>Unable to load products.</h2>
@@ -261,7 +203,6 @@ loadProducts();
 
 let filteredProducts = [...visibleProducts];
 
-
 if (searchInput) {
   searchInput.addEventListener("input", performSearch);
 }
@@ -273,49 +214,29 @@ if (searchInput) {
 ========================================================*/
 
 function sortProducts(type) {
-
   switch (type) {
-
     case "Newest":
-
-      filteredProducts.sort(
-        (a, b) => b.id - a.id
-      );
+      filteredProducts.sort((a, b) => b.id - a.id);
 
       break;
 
     case "Oldest":
-
-      filteredProducts.sort(
-        (a, b) => a.id - b.id
-      );
+      filteredProducts.sort((a, b) => a.id - b.id);
 
       break;
 
     case "Price Low → High":
-
-      filteredProducts.sort(
-        (a, b) =>
-          Number(a.price) - Number(b.price)
-      );
+      filteredProducts.sort((a, b) => Number(a.price) - Number(b.price));
 
       break;
 
     case "Price High → Low":
-
-      filteredProducts.sort(
-        (a, b) =>
-          Number(b.price) - Number(a.price)
-      );
+      filteredProducts.sort((a, b) => Number(b.price) - Number(a.price));
 
       break;
 
     case "Most Rare":
-
-      filteredProducts.sort(
-        (a, b) =>
-          Number(b.price) - Number(a.price)
-      );
+      filteredProducts.sort((a, b) => Number(b.price) - Number(a.price));
 
       break;
   }

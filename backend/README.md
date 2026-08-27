@@ -10,4 +10,4 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-The API is served at `http://127.0.0.1:8000/api/`.
+The API is served at `https://old-currency.onrender.com/api/`.
