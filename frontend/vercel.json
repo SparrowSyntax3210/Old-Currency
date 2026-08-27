@@ -1,20 +1,36 @@
 {
   "rewrites": [
     {
-      "source": "/admin",
-      "destination": "/admin/index.html"
-    },
-    {
-      "source": "/admin/:path*",
-      "destination": "/admin/:path*"
-    },
-    {
       "source": "/",
       "destination": "/customer/index.html"
     },
     {
-      "source": "/customer/:path*",
-      "destination": "/customer/:path*"
+      "source": "/css/:path*",
+      "destination": "/customer/css/:path*"
+    },
+    {
+      "source": "/js/:path*",
+      "destination": "/customer/js/:path*"
+    },
+    {
+      "source": "/script.js",
+      "destination": "/customer/script.js"
+    },
+    {
+      "source": "/product.html",
+      "destination": "/customer/product.html"
+    },
+    {
+      "source": "/product-information.html",
+      "destination": "/customer/product-information.html"
+    },
+    {
+      "source": "/registration-form.html",
+      "destination": "/customer/registration-form.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin/index.html"
     }
   ]
 }
