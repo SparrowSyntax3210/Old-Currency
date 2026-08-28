@@ -55,13 +55,14 @@ const AddProduct = () => {
 
     try {
       await productsService.createProduct({
-        name: form.name,
-        description: form.description,
-        price: Number(form.price),
-        category: form.category,
-        stock: Number(form.stock),
-        images: images
-      })
+  title: form.name,
+  description: form.description,
+  price: Number(form.price),
+  category: Number(form.category),
+  condition: form.condition,
+  year: form.year ? Number(form.year) : undefined,
+  image: images[0]
+})
 
       // Navigate back to products page on success
       navigate('/products')

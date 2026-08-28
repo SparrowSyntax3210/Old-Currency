@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Plus, Pencil, Package, Loader2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { productsService, ApiError, type Product } from '../services'
+import { productsService,type Product } from '../services'
 import PageHeader from '../components/ui/PageHeader'
 import StatusBadge from '../components/ui/StatusBadge'
 
@@ -9,7 +9,6 @@ const Products = () => {
   const navigate = useNavigate()
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
 
   useEffect(() => {
     loadProducts()

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ShoppingCart, Loader2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { ordersService, ApiError, type Order } from '../services'
+import { ordersService, type Order } from '../services'
 import PageHeader from '../components/ui/PageHeader'
 import StatusBadge from '../components/ui/StatusBadge'
 
@@ -16,7 +16,6 @@ const Orders = () => {
     monthly_revenue: 0
   })
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
 
   useEffect(() => {
     loadData()
