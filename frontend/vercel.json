@@ -1,11 +1,11 @@
 {
   "buildCommand": "cd admin && npm install && npm run build",
-  "outputDirectory": ".",
   "rewrites": [
     {
       "source": "/",
       "destination": "/customer/index.html"
     },
+
     {
       "source": "/auth.html",
       "destination": "/customer/auth.html"
@@ -61,12 +61,23 @@
     },
 
     {
-      "source": "/admin",
-      "destination": "/admin/index.html"
+      "source": "/vite.svg",
+      "destination": "/customer/vite.svg"
     },
+
+    {
+      "source": "/admin",
+      "destination": "/admin-dist/index.html"
+    },
+
+    {
+      "source": "/admin/assets/:path*",
+      "destination": "/admin-dist/assets/:path*"
+    },
+
     {
       "source": "/admin/:path*",
-      "destination": "/admin/:path*"
+      "destination": "/admin-dist/index.html"
     }
   ]
 }
